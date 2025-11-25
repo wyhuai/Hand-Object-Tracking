@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Airplane">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="2.147062886172417e-05 0.0001223769658972787 0.000135974770663808" xyz="-0.0001605711170046575 0.004200295861900809 -0.009750608750180778"/>
+         <mass value="0.09807937167999092"/>
+         <inertia ixx="0.0001223787131134419" ixy="-1.9762357846015e-07" ixz="-1.950913383257232e-07" iyy="2.27111479195553e-05" iyz="-1.185116680587818e-05" izz="0.0001347325043898137"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

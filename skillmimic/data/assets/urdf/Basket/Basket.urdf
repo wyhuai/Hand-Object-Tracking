@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Basket">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.001350401801067532 0.001399784891162822 0.001814114436419768" xyz="0.001475118783065996 4.511646543061211e-05 -0.005910878878699336"/>
+         <mass value="0.8038603418426845"/>
+         <inertia ixx="0.001397260021804105" ixy="-1.089780885937408e-05" ixz="-4.825739774640483e-07" iyy="0.001353286539193125" iyz="1.285119983815202e-05" izz="0.001813754567652891"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Knife">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="3.742546583355788e-06 9.431057332616014e-05 9.634444507141746e-05" xyz="-4.373547975533254e-06 -0.0165096162159658 -0.003223949608236638"/>
+         <mass value="0.06563450502816857"/>
+         <inertia ixx="9.63444447694738e-05" ixy="5.252140645266181e-09" ixz="-5.203692001475653e-11" iyy="3.810178563284057e-06" iyz="2.474003623471395e-06" izz="9.424294164817554e-05"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

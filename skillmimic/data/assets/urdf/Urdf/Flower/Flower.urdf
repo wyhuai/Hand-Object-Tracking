@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Flower">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.0005146651785324315 0.0005195820686867474 0.0009424238377395712" xyz="-2.15693476606654e-05 -0.006471382288586615 7.689351690222637e-09"/>
+         <mass value="0.5987213243505327"/>
+         <inertia ixx="0.0005195625803037426" ixy="3.08937907960856e-07" ixz="-4.116700179868821e-09" iyy="0.0005146846669578082" iyz="9.935928590371975e-10" izz="0.0009424238376971997"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

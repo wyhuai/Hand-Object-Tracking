@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Lego">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.0001632272682903366 0.0006841666328591307 0.0007019358104819392" xyz="0.01243451753070805 -0.002755404071568744 -0.006831581728473388"/>
+         <mass value="0.4242477809042481"/>
+         <inertia ixx="0.0003058630682760525" ixy="-4.678035148800918e-05" ixz="-0.000233021411815357" iyy="0.000679777045845315" iyz="-2.31434054784607e-05" izz="0.0005636895975100395"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

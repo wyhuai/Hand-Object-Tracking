@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Bolt">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.002050976294295632 0.002054069593464448 0.002781241535798416" xyz="-1.685672738460347e-06 -1.952920976779188e-05 0.009004680682844556"/>
+         <mass value="1.330741310379933"/>
+         <inertia ixx="0.002051086474981989" ixy="-5.707579690111276e-07" ixz="-8.990150509387739e-07" iyy="0.002053960568399363" iyz="1.874851423336643e-07" izz="0.002781240380177142"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

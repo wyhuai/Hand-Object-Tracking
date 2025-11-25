@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Usb2">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="8.317952979071127e-05 0.0004493289351969175 0.0005087987153477591" xyz="-2.235771177565193e-05 -3.615478841513024e-07 0.006134674868685067"/>
+         <mass value="0.304593690961189"/>
+         <inertia ixx="0.0004493288150707935" ixy="7.853439278438685e-10" ixz="2.097327759340111e-07" iyy="0.0005087987151086827" iyz="-9.868927426094305e-09" izz="8.317965015591124e-05"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

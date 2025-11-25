@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Lifebuoy">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.002117490916904275 0.002204480846428813 0.003830566229519998" xyz="-0.001568777580122191 -0.0003817619054385731 -0.000742319923935526"/>
+         <mass value="1.360410370748329"/>
+         <inertia ixx="0.002201886811052379" ixy="1.117344443654533e-05" ixz="1.50605212072531e-05" iyy="0.003830452874860182" iyz="7.819139943543239e-06" izz="0.002120198306940524"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

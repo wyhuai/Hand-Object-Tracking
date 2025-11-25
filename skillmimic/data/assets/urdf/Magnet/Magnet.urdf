@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Magnet">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.0005599516552081204 0.0006302274053027833 0.00107436800126794" xyz="-2.87230954561236e-05 -0.002913129623785413 1.050546330514756e-08"/>
+         <mass value="0.4670051547806144"/>
+         <inertia ixx="0.0006302272720475195" ixy="-9.680908511956957e-08" ixz="-6.84328515010713e-09" iyy="0.0005599517885789364" iyz="-2.282142088636015e-09" izz="0.001074368001152388"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

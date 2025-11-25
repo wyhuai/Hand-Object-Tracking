@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Whitewineglass">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.0002358279607769591 0.000523391999676974 0.0005241881484873323" xyz="-0.0002929529456270819 0.01475474935810775 0.0001767412497373773"/>
+         <mass value="0.2645213452724037"/>
+         <inertia ixx="0.0005240513080008671" ixy="-1.40894680100155e-06" ixz="-2.971686644841095e-07" iyy="0.000235836102779374" iyz="-5.993118813344371e-07" izz="0.0005235206981610243"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

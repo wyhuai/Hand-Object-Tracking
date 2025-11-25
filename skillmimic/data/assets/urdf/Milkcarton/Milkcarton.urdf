@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Milkcarton">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.0001747120607897575 0.001025645899109843 0.001026590700089789" xyz="-1.604151023517996e-07 2.485352329583159e-05 -0.0004701510846910557"/>
+         <mass value="0.5453158959816994"/>
+         <inertia ixx="0.001025645905328269" ixy="2.456215505651252e-09" ixz="9.72342976150603e-09" iyy="0.001026589647507258" iyz="-9.440759639794495e-07" izz="0.0001747131071538626"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

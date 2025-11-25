@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<robot name="00581_socket">
+	<link name="00581_socket">
+		<!-- <visual>
+			<geometry>
+				<mesh filename="asset_socket.obj" scale="1 1 1.7"/>
+			</geometry>
+		</visual> -->
+
+	</link>
+</robot>

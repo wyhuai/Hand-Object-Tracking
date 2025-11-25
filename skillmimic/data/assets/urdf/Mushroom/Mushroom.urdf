@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Mushroom">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.002088038382935758 0.002438438921940855 0.002440430092967833" xyz="2.222194162031933e-08 0.0258587256103319 -6.384293294566253e-08"/>
+         <mass value="1.446334013652581"/>
+         <inertia ixx="0.002440429972588598" ixy="-1.008666518433947e-09" ixz="-1.548145468279623e-08" iyy="0.002088038382939027" iyz="-3.660225791988932e-10" izz="0.00243843904231682"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Longvase">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="6.778716686946904e-05 0.0005809760203841632 0.0005810046810283739" xyz="1.13956847784689e-09 0.01176810555900483 1.063965523278436e-07"/>
+         <mass value="0.3263552436608695"/>
+         <inertia ixx="0.000581004678892109" ixy="3.250992704511275e-10" ixz="2.474175393730889e-10" iyy="6.778716688318107e-05" iyz="2.632718813217861e-09" izz="0.000580976022506716"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Drill">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.0001946024563387998 0.0006623696616370591 0.0008124984425183261" xyz="-0.000751458938646164 -0.0005217271956225187 0.003655990776632336"/>
+         <mass value="0.3555354296668376"/>
+         <inertia ixx="0.000638778742487644" ixy="1.480714020623281e-06" ixz="-0.000102358964574964" iyy="0.0008124442017825331" iyz="5.586529675833142e-06" izz="0.0002182476162240079"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

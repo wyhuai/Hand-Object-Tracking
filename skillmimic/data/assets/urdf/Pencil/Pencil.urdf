@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Pencil">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="1.619275310843692e-05 0.0004640060675461952 0.0004640500597694716" xyz="-3.005508516776846e-05 0.01196327908605419 9.732987137213094e-06"/>
+         <mass value="0.186865162060831"/>
+         <inertia ixx="0.000464026314276028" ixy="-4.81007939431286e-07" ixz="2.213306597239035e-08" iyy="1.619332670206571e-05" iyz="1.596822263671133e-07" izz="0.00046402923944601"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

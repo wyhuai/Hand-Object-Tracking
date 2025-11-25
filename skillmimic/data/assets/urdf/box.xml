@@ -1,0 +1,13 @@
+<mujocoinclude>
+    <asset>
+    </asset>
+    <worldbody>
+        <!-- Container setup -->
+        <body name="box_container" pos="0 0 0" euler="0 0 0">
+            <geom type="box" pos="-0.03 0 0.05" size="0.005 0.06 0.1" class="collision" friction="0. 0. 0."/> <!-- Left wall -->
+            <geom type="box" pos="0.03 0 0.05" size="0.005 0.06 0.1" class="collision" friction="0. 0. 0."/> <!-- Right wall -->
+            <geom type="box" pos="0 -0.03 0.05" size="0.06 0.005 0.1" class="collision" friction="0. 0. 0."/> <!-- Back wall -->
+            <geom type="box" pos="0 0.03 0.05" size="0.06 0.005 0.1" class="collision" friction="0. 0. 0."/> <!-- Front wall -->
+        </body>
+    </worldbody>
+</mujocoinclude>

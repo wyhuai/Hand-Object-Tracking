@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Battleaxe">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="3.278650400909589e-05 0.0001422465692662651 0.0001720581798149385" xyz="-2.453501620818276e-06 0.01454409905878872 -0.0002269861823121262"/>
+         <mass value="0.1033498716714339"/>
+         <inertia ixx="0.0001720581775273117" ixy="5.744451393235168e-09" ixz="7.677459745959514e-09" iyy="3.289803217071064e-05" iyz="3.492193841754237e-06" izz="0.0001421350433922773"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

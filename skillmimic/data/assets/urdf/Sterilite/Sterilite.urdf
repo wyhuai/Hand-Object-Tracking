@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Sterilite">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.0007134348764883204 0.001157200071156746 0.001409602578825367" xyz="-0.0001339170051636946 0.0009434394906985346 -0.00730648268135891"/>
+         <mass value="0.5692180067654605"/>
+         <inertia ixx="0.001157041790870843" ixy="-8.459938594715521e-06" ixz="7.723148720436346e-07" iyy="0.0007136427100027514" iyz="-5.703880817040963e-06" izz="0.001409553025596839"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Oiltank">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.001826683318713648 0.003339481752865935 0.003339548316308754" xyz="7.198607953942688e-07 2.633445166172736e-06 -1.201144209487827e-06"/>
+         <mass value="1.734595889673525"/>
+         <inertia ixx="0.003339482075785173" ixy="1.869304728951106e-08" ixz="4.626537332249002e-09" iyy="0.001826683318970659" iyz="6.275219685784945e-09" izz="0.003339547993132505"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

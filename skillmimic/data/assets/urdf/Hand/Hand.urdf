@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Hand">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="6.735691516259388e-05 0.0002654197292383183 0.0003084666124110758" xyz="-0.005170973350784711 0.00359908235332562 -0.009962332675891262"/>
+         <mass value="0.2415270352592125"/>
+         <inertia ixx="0.0002032560873146434" ixy="0.0001171812500327199" ixz="-1.184108593411322e-05" iyy="0.0001747672081023305" iyz="2.501561687960384e-05" izz="0.0002632199613950142"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

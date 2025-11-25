@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Stapler">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="3.576533476960473e-05 0.0003017475719954262 0.0003227394955837069" xyz="-0.01135040094786751 -0.0006731821052298576 -0.000702895560951947"/>
+         <mass value="0.1708491846832742"/>
+         <inertia ixx="3.611594186296298e-05" ixy="-5.051961525449735e-06" ixz="-8.337192487888459e-06" iyy="0.0003226500256780261" iyz="-5.243332034412494e-08" izz="0.0003014864348077489"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

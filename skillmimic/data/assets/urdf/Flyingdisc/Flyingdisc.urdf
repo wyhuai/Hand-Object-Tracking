@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Flyingdisc">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.0009644510208038411 0.0009649189492122477 0.001816502372898564" xyz="-1.395548676888135e-06 -0.003827043200096342 4.266452148166747e-09"/>
+         <mass value="0.7957124328435355"/>
+         <inertia ixx="0.0009649188762032411" ixy="-8.612832832861983e-10" ixz="5.844490892229929e-09" iyy="0.001816502372897109" iyz="-7.054054629508895e-10" izz="0.0009644510938143031"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

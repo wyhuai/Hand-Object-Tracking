@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Book">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.000153849146843347 0.0003587414836258444 0.0005072243155423766" xyz="1.47858358138939e-19 3.466276527799302e-19 8.096582197197222e-21"/>
+         <mass value="0.2494548429861538"/>
+         <inertia ixx="0.0003587414835294193" ixy="4.457540471988017e-09" ixz="2.86009942323674e-10" iyy="0.0001538491469420195" iyz="7.742314513348125e-10" izz="0.0005072243155401293"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>

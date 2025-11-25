@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="Decanter">
+   <material name="obj_color">
+      <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+   </material>
+   <link name="top">
+      <inertial>
+         <origin rpy="0.000554522045133317 0.000650468378529904 0.0006539825974749946" xyz="-0.0002652861592588794 -0.0281310991398482 -0.0001257321430753315"/>
+         <mass value="0.4196800389167377"/>
+         <inertia ixx="0.0006526050495503833" ixy="-5.03735430665003e-06" ixz="1.573934287961982e-06" iyy="0.0005547954149267924" iyz="-1.273513827684446e-06" izz="0.0006515725566610399"/>
+      </inertial>
+      <visual>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+         <material name="obj_color"/>
+      </visual>
+      <collision>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="top_watertight_tiny.obj" scale="1 1 1"/>
+         </geometry>
+      </collision>
+   </link>
+</robot>
