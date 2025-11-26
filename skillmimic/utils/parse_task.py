@@ -28,6 +28,7 @@
 
 from env.tasks.vec_task_wrappers import VecTaskPythonWrapper, VecTaskDAggerWrapper
 from env.tasks.distill.skillmimic2_distill import Distill
+from env.tasks.distill.skillmimic2_multiobj_distill import MultiObjDistill
 from env.tasks.open_loop import OpenLoop
 from env.tasks.skillmimic import SkillMimicBallPlay
 from env.tasks.skillmimic_multi import MultiSkillMimicBallPlay

@@ -126,7 +126,7 @@ class HumanoidWholeBody(BaseTask):
         self._num_actions = 17*3  #changed by me
         obj_obs_size = 15
         # 5 *3 is contact force
-        self._num_obs = 1 + (num_key_bodies + 1) * (3 + 6 + 3 + 3) - 3 + (num_key_bodies - 15) * 3 + 48 + 3 + 7
+        self._num_obs = 1 + (num_key_bodies + 1) * (3 + 6 + 3 + 3) - 3 + 5*3 + (num_key_bodies - 15) * 3 + 48 + 3 + 7
         if self._enable_text_obs:
             self._num_obs += 52
         if self._enable_future_target_obs:
@@ -144,8 +144,8 @@ class HumanoidWholeBody(BaseTask):
             self._num_obs += 51 * 2 + 1
         if "Insert" in self.cfg['name']:
             self._num_obs += obj_obs_size
-        # if self._enable_wrist_local_obs:
-        #     self._num_obs -= 15
+        if self._enable_wrist_local_obs:
+            self._num_obs -= 15
         if "DexGenBallPlay" in self.cfg['name']:
             self._num_obs = 387
         return
