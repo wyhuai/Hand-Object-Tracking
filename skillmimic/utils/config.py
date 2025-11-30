@@ -224,6 +224,8 @@ def get_args(benchmark=False):
     custom_parameters = [
         {"name": "--test", "action": "store_true", "default": False,
             "help": "Run trained policy, no training"},
+        {"name": "--hand_model", "action": "store_true", "type": str, "default": "mano",
+            "help": "Can be shadow, mano, allegro"},
         {"name": "--play", "action": "store_true", "default": False,
             "help": "Run trained policy, the same as test, can be used only by rl_games RL library"},
         {"name": "--resume", "type": int, "default": 0,

@@ -123,10 +123,19 @@ class HumanoidWholeBody(BaseTask):
         num_key_bodies = len(key_bodies)
         asset_file = "mjcf/rhand_mano_low_mass.xml"
         self._dof_obs_size = 17*3 #changed by me 17 as included wris_r
-        self._num_actions = 17*3  #changed by me
         obj_obs_size = 15
-        # 5 *3 is contact force
-        self._num_obs = 1 + (num_key_bodies + 1) * (3 + 6 + 3 + 3) - 3 + 5*3 + (num_key_bodies - 15) * 3 + 48 + 3 + 7
+        
+        if self.hand_model == "mano":
+            self._num_obs = 1 + (num_key_bodies + 1) * (3 + 6 + 3 + 3) - 3 +  (num_key_bodies - 15) * 3 + (48 + 3) + 7 #48+3 keybody residual + obj residual
+            self._num_actions = 17*3  #changed by me
+        elif self.hand_model == "shadow":
+            self._num_obs = 1 + (num_key_bodies + 1) * (3 + 6 + 3 + 3) - 3 + \
+                len(self.cfg["env"]["contactBodies"])*3 + (num_key_bodies*3 + 3)  + 7 - 15  #warningggg #same shape as obs from _compute_humanoid_obs() #changed by me + 5 *3 is contact force
+            self._num_actions = 28
+        elif self.hand_model == "allegro":
+            self._num_obs = 1 + (num_key_bodies + 1) * (3 + 6 + 3 + 3) - 3 + 17*3 + (num_key_bodies*3 + 3)  + 7 - 15  #warningggg #same shape as obs from _compute_humanoid_obs() #changed by me + 5 *3 is contact force
+            self._num_actions = 22
+        
         if self._enable_text_obs:
             self._num_obs += 52
         if self._enable_future_target_obs:
@@ -141,7 +150,13 @@ class HumanoidWholeBody(BaseTask):
         if self._enable_obj_keypoints:
             self._num_obs += self._num_target_keypoints*3
         if self._enable_dof_obs:
-            self._num_obs += 51 * 2 + 1
+            if self.hand_model == "mano":
+                num_dof = 51
+            elif self.hand_model == "shadow":
+                num_dof = 28
+            elif self.hand_model == "allegro":
+                num_dof = 22
+            self._num_obs += num_dof * 2 + 1
         if "Insert" in self.cfg['name']:
             self._num_obs += obj_obs_size
         if self._enable_wrist_local_obs:

@@ -1,3 +1,4 @@
+from enum import Enum
 import numpy as np
 import torch
 from torch import Tensor
@@ -45,7 +46,12 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
         self._num_sampled_obj_surface_pt = self.get_num_obj_keypoints()
         self._num_target_keypoints = len(cfg['env']["keyBodies"]) if self.body_to_obj_keypoint else 20
         # object scale randomization
-        self._obj_scale_range = [0.75, 1.5]
+        self.obj_scale_dict = {'Ball': [0.6, 1.0], 'Book': [0.9, 1.1], 'Bowl': [0.6, 1.6], 'Bottle': [0.8, 1.4], 'Box':[0.8, 1.4], 
+                            'Gun': [0.9, 2.0], 'Hammer': [0.9, 2.0], 'Mug': [0.6, 1.6], 'Screwdriver': [0.9, 2.0], 'Shoe': [0.8, 1.4], 
+                            'Stick': [0.6, 1.6], 'Sword': [0.6, 1.6], 'Wineglass': [0.9, 2.0]}
+        # self.obj_scale_dict = {'Ball': [0.5, 0.8], 'Book': [0.8, 1.0], 'Bowl': [0.6, 1.0], 'Bottle': [0.6, 1.0], 'Box':[0.6, 0.8], 
+        #                     'Gun': [0.8, 1.1], 'Hammer': [0.8, 1.0], 'Mug': [0.6, 1.0], 'Screwdriver': [0.9, 1.0], 'Shoe': [0.8, 1.0], 
+        #                     'Stick': [0.6, 1.0], 'Sword': [0.5, 0.8], 'Wineglass': [0.8, 0.9]}
         ##################################################
 
         super().__init__(cfg=cfg,
@@ -169,29 +175,20 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
                 key_body_pos = ref_obs['key_body_pos'][contact_frame_id,:].clone().view(-1, num_key, 3)
             else:
                 keypoints_tensor = keypoints_tensor[env_ids]
-                # Get all motion data at once
-                motion_ids = self.motion_ids_total[env_ids]
-                motion_datas = torch.stack([self._motion_data.hoi_data_dict[mid.item()]['hoi_data'] for mid in motion_ids])
-                
-                # Find contact frames (vectorized)
-                contact_flags = motion_datas[..., -2]  # Extract contact flags for all frames
-                contact_mask = (contact_flags == 1)  # Boolean mask of contact frames
-                
-                # Find the 10th contact frame for each environment
-                # First create a cumulative sum of contacts for each env
-                cum_contacts = contact_mask.cumsum(dim=1)
-                # Find the first frame where cumulative contacts reaches 11 (since we want index of 10th contact)
-                contact_frame_ids = (cum_contacts == 10).nonzero(as_tuple=True)[1]
-                # Handle cases where there aren't 10 contacts (use last frame as fallback)
-                contact_frame_ids = torch.where(cum_contacts[:, -1] >= 10, 
-                                            contact_frame_ids,
-                                            torch.tensor(motion_datas.shape[1]-1, device=self.device))
-                
-                # Gather reference observations in batch
-                last_frame_ref_obs = motion_datas[env_ids, contact_frame_ids]
-                
-                # Extract target positions, rotations, and key body positions
-                
+                # contact_frame_ids = torch.min(
+                #     self._motion_data.envid2episode_lengths[env_ids] - 1,
+                #     torch.tensor(self.max_episode_length - 1, device=self.device)
+                # )
+                # contact_frame_ids = torch.where(self.skill_labels[env_ids] == 3, torch.zeros_like(contact_frame_ids), contact_frame_ids)
+                contact_frame_ids = torch.zeros_like(env_ids)
+                last_frame_ref_obs = torch.zeros([len(env_ids), self.ref_hoi_obs_size], device=self.device, dtype=torch.float)
+                for ind, env_id in enumerate(env_ids):
+                    mid = self.motion_ids_total[env_id]
+                    motion_data = self._motion_data.hoi_data_dict[mid.item()]['hoi_data']
+                    motion_data_contact = motion_data[:,-2]
+                    contact_frame_ids[ind] = torch.where(motion_data_contact == 1)[0][10] # reference motion里的第10个接触帧
+                    # Get reference observations in batch
+                    last_frame_ref_obs[ind] = motion_data[contact_frame_ids[ind]]
                 if self.hand_model == "mano":
                     # Extract target positions and rotations
                     ref_tar_pos = last_frame_ref_obs[:, 109:109+3]  # shape: [B, 3]
@@ -214,7 +211,6 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
                     # Extract key body positions
                     key_body_pos = last_frame_ref_obs[:, 61:61+num_key*3].view(-1, num_key, 3)  # shape: [B, num_key, 3]
 
-           
             # Transform keypoints to target frame
             target_keypoints_per_epoch = transform_keypoints_batch(keypoints_tensor, ref_tar_pos, ref_tar_rot)
             # calculate the Euclidean distances between two sets of points.
@@ -322,6 +318,7 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
             asset_options.disable_gravity = True
             asset_options.density = 0.0
             setattr(self, f"keypose_traj_asset_{i}", self.gym.load_asset(self.sim, asset_root, asset_file, asset_options))
+                    
         return
 
     def _load_proj_asset(self):
@@ -364,10 +361,10 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
         
         ################## load obj keypoints while building the env ##################
         # 加载mesh并提取关键点
-        mesh_type = "stl"
+        mesh_type = "obj"
         mesh_path = os.path.join('skillmimic/data/assets/urdf', obj_name, f'top_watertight_tiny.{mesh_type}')
         self._obj_surface_pt[env_id] = self.extract_objpoints(mesh_path, num_keypoints=self._num_sampled_obj_surface_pt).to(self.device)
-        col_group = env_id 
+        col_group = env_id
         col_filter = 0
         segmentation_id = 0
 
@@ -379,7 +376,7 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
         # Modify the properties
         for b in ball_props:
             b.restitution = self.ball_restitution #0.66 #1.6
-            b.friction = 2
+            # b.friction = 10
         self.gym.set_actor_rigid_shape_properties(env_ptr, target_handle, ball_props)  
         
         # set ball color
@@ -391,16 +388,18 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
         
         # 20% of the time, randomize the scale
         if self._obj_rand_scale and np.random.random() < 0.2:
-            scale_factor = random.uniform(self._obj_scale_range[0], self._obj_scale_range[1])
-            self._obj_surface_pt[env_id] *= scale_factor
+            scale_factor = random.uniform(self.obj_scale_dict[obj_name][0], self.obj_scale_dict[obj_name][1])
+            self._target_keypoints[env_id] *= scale_factor
             self.gym.set_actor_scale(env_ptr, target_handle, scale_factor)
         else:
             self.gym.set_actor_scale(env_ptr, target_handle, self.ball_size)
 
+        if obj_name == 'Apple':
+            self.gym.set_actor_scale(env_ptr, target_handle, 0.8)
         return
     
     def _build_target2(self, env_id, env_ptr):
-        col_group = env_id 
+        col_group = env_id
         col_filter = 0
         segmentation_id = 0
 
@@ -453,18 +452,20 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
             self.gym.set_actor_scale(env_ptr, traj_handle, 0.0001)
         shape_props = self.gym.get_actor_rigid_shape_properties(env_ptr, traj_handle)
 
+        if obj_name == 'Apple':
+            self.gym.set_actor_scale(env_ptr, traj_handle, 0.8)
         for prop in shape_props:
             prop.filter = 0  # 让物体不与任何物体发生碰撞
         self.gym.set_actor_rigid_shape_properties(env_ptr, traj_handle, shape_props)
         
+        # build key pose traj
         if self.hand_model == "mano":
             num_key_pos = 16
         elif self.hand_model == "shadow":
             num_key_pos = 23
         elif self.hand_model == "allegro":
             num_key_pos = 17
-        
-        # build key pose traj
+
         for i in range(num_key_pos):
             # build object traj
             tmp_col_group = self.num_envs*2 + env_id*num_key_pos + i # 互相不碰撞
@@ -496,7 +497,7 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
             keypoint_asset = self.gym.create_sphere(self.sim, 0.01, keypoint_asset_options)  # 5mm radius
 
             # build asset
-            kp_col_group = self.num_envs*2+env_id*16 +env_id*16+ i
+            kp_col_group = self.num_envs*2+env_id*num_key_pos +env_id*num_key_pos+ i
             kp_pose = gymapi.Transform()
             kp_pose.p.x = 0
             kp_pose.p.y = 0
@@ -511,7 +512,7 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
         return
 
     def _build_proj(self, env_id, env_ptr):
-        col_group = env_id 
+        col_group = env_id
         col_filter = 0
         segmentation_id = 0
 
@@ -577,7 +578,7 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
         self._keypose_traj_states = self._root_states.view(self.num_envs, num_actors, self._root_states.shape[-1])[..., 4:4+num_key_pos, :]        
         self._traj_actor_ids = num_actors * np.arange(self.num_envs)
         self._traj_actor_ids = np.expand_dims(self._traj_actor_ids, axis=-1)
-        self._traj_actor_ids = self._traj_actor_ids + np.reshape(np.array(self._traj_handles), [self.num_envs, 17])
+        self._traj_actor_ids = self._traj_actor_ids + np.reshape(np.array(self._traj_handles), [self.num_envs, 1+num_key_pos])
         self._traj_actor_ids = self._traj_actor_ids.flatten()
         self._traj_actor_ids = to_torch(self._traj_actor_ids, device=self.device, dtype=torch.int32)
         
@@ -685,7 +686,7 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
     
     def pre_physics_step(self, actions):
         super().pre_physics_step(actions)
-        self.evts = list(self.gym.query_viewer_action_events(self.viewer))
+        self.evts = list(self.gym.query_viewer_action_events(self.viewer))        
         return 
     
     def post_physics_step(self):
@@ -705,10 +706,7 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
         positions = positions.reshape(1, -1, 3)
         forces = torch.zeros((1, self._rigid_body_state.shape[0], 3), device=self.device, dtype=torch.float).reshape(self.num_envs, bodies_per_env, 3)
         torques = torch.zeros((1, self._rigid_body_state.shape[0], 3), device=self.device, dtype=torch.float)
-        # Create a mask based on obj_contact
-
         random_forces = torch.randn((self.num_envs, 3), device=self.device) * self.disturbance_force_scale
-        # Apply forces only where obj_contact is True
         forces[:, self.num_bodies, :] = random_forces.reshape(-1, 3)
         self.gym.apply_rigid_body_force_tensors(self.sim, gymtorch.unwrap_tensor(forces), gymtorch.unwrap_tensor(torques), gymapi.ENV_SPACE)
 
@@ -740,7 +738,7 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
                 end_pos[0], end_pos[1], end_pos[2]
                 ]
                 , [0.85, 0.1, 0.1])
-
+ 
     def _update_proj(self):
 
         if self.projtype == 'Auto':
@@ -965,7 +963,11 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
 class HumanoidWholeBodyWithObjectPlane(HumanoidWholeBodyWithObject): #metric
     def __init__(self, cfg, sim_params, physics_engine, device_type, device_id, headless):
         # cfg['env'].get('enable_plane', False)
-        self._enable_plane = True # if 'higher' in cfg['args'].motion_file else False
+        self._enable_plane = True if 'higher' in cfg['args'].motion_file else False
+        self._grab_plane = False
+        if 'grab' in cfg['args'].motion_file:
+            self._enable_plane = True
+            self._grab_plane = True
         super().__init__(cfg=cfg,
                          sim_params=sim_params,
                          physics_engine=physics_engine,
@@ -978,7 +980,10 @@ class HumanoidWholeBodyWithObjectPlane(HumanoidWholeBodyWithObject): #metric
         if self._enable_plane:
             plane_asset_options = gymapi.AssetOptions()
             plane_asset_options.fix_base_link = True  # 固定桌子，使其不会移动
-            self._plane_proj_asset = self.gym.create_box(self.sim, 3, 3, 0.01, plane_asset_options)
+            if self._grab_plane:
+                self._plane_proj_asset = self.gym.create_box(self.sim, 0.3, 0.3, 0.01, plane_asset_options)
+            else:
+                self._plane_proj_asset = self.gym.create_box(self.sim, 3, 3, 0.01, plane_asset_options)
             
 
     def _build_env(self, env_id, env_ptr, humanoid_asset):
@@ -988,14 +993,14 @@ class HumanoidWholeBodyWithObjectPlane(HumanoidWholeBodyWithObject): #metric
         return
     
     def _build_plane(self, env_id, env_ptr):
-        col_group = env_id 
+        col_group = env_id
         col_filter = 1
         segmentation_id = 0
 
         plane_pose = gymapi.Transform()
-        plane_pose.p.x = 0
-        plane_pose.p.y = 0
-        plane_pose.p.z = 0.1
+        plane_pose.p.x = 0 # 0
+        plane_pose.p.y = 0 # 0
+        plane_pose.p.z = 0.1 # 0.1
         plane_handle = self.gym.create_actor(env_ptr, self._plane_proj_asset, plane_pose, "plane", col_group, col_filter, segmentation_id)
         self.gym.set_rigid_body_color(env_ptr, plane_handle, 0, gymapi.MESH_VISUAL, gymapi.Vec3(0.5, 0.5, 0.5))
         
@@ -1044,8 +1049,46 @@ def transform_keypoints_batch(keypoints: Tensor, position: Tensor, quaternion: T
     
     return transformed_points
 
+@torch.jit.script
+def compute_obj_observations(root_states: Tensor, tar_states: Tensor, tar_keypoints_orig: Tensor, body_pos,
+                             enable_nearest_vector: bool, enable_obj_keypoints: bool) -> Tensor:
+    root_pos = root_states[:, 0:3]
+    root_rot = root_states[:, 3:7]
 
-# @torch.jit.script
+    tar_pos = tar_states[:, 0:3]
+    tar_rot = tar_states[:, 3:7]
+    tar_vel = tar_states[:, 7:10]
+    tar_ang_vel = tar_states[:, 10:13]
+
+    heading_rot = torch_utils.calc_heading_quat_inv(root_rot)
+    local_tar_pos = tar_pos - root_pos
+    local_tar_pos[..., -1] = tar_pos[..., -1]
+    local_tar_pos = quat_rotate(heading_rot, local_tar_pos)
+    local_tar_vel = quat_rotate(heading_rot, tar_vel)
+    local_tar_ang_vel = quat_rotate(heading_rot, tar_ang_vel)
+
+    local_tar_rot = quat_mul(heading_rot, tar_rot)
+    local_tar_rot_obs = torch_utils.quat_to_tan_norm(local_tar_rot)
+
+    ## for disturbance test
+    # local_tar_pos += torch.rand_like(local_tar_pos).to(self.device)*0.05
+    # local_tar_rot_obs += torch.rand_like(local_tar_rot_obs).to(self.device)*0.5
+    # local_tar_vel += torch.rand_like(local_tar_vel).to(self.device)*0.5
+    # local_tar_ang_vel += torch.rand_like(local_tar_ang_vel).to(self.device)*0.5
+
+    obs = torch.cat([local_tar_pos, local_tar_rot_obs, local_tar_vel, local_tar_ang_vel], dim=-1)
+
+
+    # transform obj keypoints to current obj pose
+    tar_keypoints = tar_keypoints_orig
+    # Do not need transform to local for the time being, because root is fixed.
+    # TODO: transform to wrist local coordinates.
+    if enable_obj_keypoints:
+        tar_keypoints = tar_keypoints.view(tar_keypoints.shape[0],-1)
+        obs = torch.cat([obs, tar_keypoints], dim=-1)
+    return obs
+
+@torch.jit.script
 def compute_obj_local_observations(tar_states, tar_keypoints_orig, body_pos, body_rot,
                              enable_nearest_vector=False, enable_obj_keypoints=False, enable_body_to_obj_keypoint=False):
     # type: (Tensor, Tensor, Tensor, Tensor, bool, bool, bool) -> Tensor
@@ -1060,14 +1103,7 @@ def compute_obj_local_observations(tar_states, tar_keypoints_orig, body_pos, bod
 
     heading_rot = torch_utils.calc_heading_quat_inv(wrist_rot)
     local_tar_pos = tar_pos - wrist_pos
-    ##################### Version 1 #####################
-    # norm = torch.norm(local_tar_pos[..., :2], dim=-1, keepdim=True)
-    # local_tar_pos[..., :2] = torch.where(norm > 0.5, (local_tar_pos[..., :2] / norm) * 0.5, local_tar_pos[..., :2])
-    # local_tar_pos[..., -1] = tar_pos[..., -1]
-    ##################### Version 2 #####################
-    norm = torch.norm(local_tar_pos, dim=-1, keepdim=True)
-    local_tar_pos = torch.where(norm > 0.5, (local_tar_pos / norm) * 0.5, local_tar_pos)
-    
+    local_tar_pos[..., -1] = tar_pos[..., -1]
     local_tar_pos = quat_rotate(heading_rot, local_tar_pos)
     local_tar_vel = quat_rotate(heading_rot, tar_vel)
     local_tar_ang_vel = quat_rotate(heading_rot, tar_ang_vel)
@@ -1080,8 +1116,8 @@ def compute_obj_local_observations(tar_states, tar_keypoints_orig, body_pos, bod
     # transform obj keypoints to current obj pose
     tar_keypoints = tar_keypoints_orig
     if enable_obj_keypoints:
-        num_pbj_keypoints = tar_keypoints_orig.shape[1]
-        heading_rot_expand = heading_rot.unsqueeze(1).repeat((1, num_pbj_keypoints, 1)) # [num_envs, 20, 4]
+        num_obj_keypoints = tar_keypoints_orig.shape[1]
+        heading_rot_expand = heading_rot.unsqueeze(1).repeat((1, num_obj_keypoints, 1)) # [num_envs, 20, 4]
         flat_heading_rot = heading_rot_expand.reshape(-1, 4) # [num_envs*20, 4]
         if enable_body_to_obj_keypoint:
             local_tar_keypoints = tar_keypoints
@@ -1089,14 +1125,7 @@ def compute_obj_local_observations(tar_states, tar_keypoints_orig, body_pos, bod
             local_tar_keypoints = flat_local_tar_keypoints.view(local_tar_keypoints.shape[0],-1) # [num_envs, 60]
         else:
             local_tar_keypoints = tar_keypoints - wrist_pos.unsqueeze(1)
-            ##################### Version 1 #####################
-            # norm = torch.norm(local_tar_keypoints[..., :2], dim=-1, keepdim=True)
-            # local_tar_keypoints[..., :2] = torch.where(norm > 0.3, (local_tar_keypoints[..., :2] / norm) * 0.3, local_tar_keypoints[..., :2])
-            # local_tar_keypoints[..., -1] = tar_keypoints[..., -1]
-            ##################### Version 2 #####################
-            norm = torch.norm(local_tar_keypoints, dim=-1, keepdim=True)
-            local_tar_keypoints = torch.where(norm > 0.5, (local_tar_keypoints / norm) * 0.5, local_tar_keypoints)
-            ####################################################
+            local_tar_keypoints[..., -1] = tar_keypoints[..., -1]
             flat_local_tar_keypoints = local_tar_keypoints.reshape(-1, 3) # [num_envs*20, 3]
             flat_local_tar_keypoints = quat_rotate(flat_heading_rot, flat_local_tar_keypoints)
             local_tar_keypoints = flat_local_tar_keypoints.view(local_tar_keypoints.shape[0],-1) # [num_envs, 60]

@@ -56,9 +56,8 @@ class SkillMimicBallPlay(HumanoidWholeBodyWithObjectPlane):
         self._enable_dense_obj = cfg["env"]["enable_dense_obj"]
 
         self._enable_wrist_local_obs = cfg["env"]["enable_wrist_local_obs"]
-
-        self.condition_size = 52
-
+        self.hand_model = cfg['env']['hand_model'] if cfg['env']['hand_model'] is not None else: "mano"
+        
         super().__init__(cfg=cfg,
                          sim_params=sim_params,
                          physics_engine=physics_engine,
@@ -70,8 +69,20 @@ class SkillMimicBallPlay(HumanoidWholeBodyWithObjectPlane):
         #self.ref_hoi_obs_size = 323 + len(self.cfg["env"]["keyBodies"])*3 + 6 -282#V1 #changed by me warning don't what is 323 so I just -276
         # 119 = root_pos (3) + root_rot (4)+ dof_pos (51)+ dof_pos_vel (51)+ obj_pos (3) + obj_rot (4)+ obj_pos_vel (3)
         self.ref_hoi_obs_size = 119 + (len(self.cfg["env"]["keyBodies"]))*3 +2 #V1 #changed by me warning don't what is 323 so I just -276 +1 is contact
-        self._load_motion(self.motion_file) #ZC1
+        if self.hand_model == "mano":
+            # 119 = root_pos (3) + root_rot (4)+ dof_pos (51)+ dof_pos_vel (51)+ obj_pos (3) + obj_rot (4)+ obj_pos_vel (3)
+            self.ref_hoi_obs_size = 119 + (len(cfg["env"]["keyBodies"]))*3 +2 #V1 #changed by me warning don't what is 323 so I just -276 +1 is contact
+            self.condition_size = 52
+        elif self.hand_model == "shadow":
+            # 73 = root_pos (3) + root_rot (4)+ dof_pos (28)+ dof_pos_vel (28)+ obj_pos (3) + obj_rot (4)+ obj_pos_vel (3)
+            self.ref_hoi_obs_size = 73 + (len(cfg["env"]["keyBodies"]))*3+2 #V1 #changed by me warning don't what is 323 so I just -276 +1 is contact
+            self.condition_size = 76 # the dimension of target (dim of target_obj_pos(3) + target_obj_quat(4) + target key body pos(23*3))
+        elif self.hand_model == "allegro":
+            # 61 = root_pos (3) + root_rot (4)+ dof_pos (22)+ dof_pos_vel (22)+ obj_pos (3) + obj_rot (4)+ obj_pos_vel (3)
+            self.ref_hoi_obs_size = 61 + (len(cfg["env"]["keyBodies"]))*3+2 #V1 #changed by me warning don't what is 323 so I just -276 +1 is contact
+            self.condition_size = 58 # the dimension of target (dim of target_obj_pos(3) + target_obj_quat(4) + target key body pos(17*3))
 
+        self._load_motion(self.motion_file) #ZC1
         self._curr_ref_obs = torch.zeros((self.num_envs, self.ref_hoi_obs_size), device=self.device, dtype=torch.float)
         self._hist_ref_obs = torch.zeros((self.num_envs, self.ref_hoi_obs_size), device=self.device, dtype=torch.float)
         self._curr_obs = torch.zeros((self.num_envs, self.ref_hoi_obs_size), device=self.device, dtype=torch.float)
@@ -269,17 +280,36 @@ class SkillMimicBallPlay(HumanoidWholeBodyWithObjectPlane):
             env_ids = torch.arange(self.num_envs)
         ts = self.progress_buf[env_ids].clone()
         self._curr_ref_obs[env_ids] = self.hoi_data_batch[env_ids,ts].clone() #ZC0
+        if self.hand_model == "mano":
+            ref_tar_pos = self._curr_ref_obs[:, 109:109+3].clone()
+            ref_tar_rot = self._curr_ref_obs[:, 112:112+4].clone()
+        elif self.hand_model == "shadow":        
+            ref_tar_pos = self._curr_ref_obs[:, 63:63+3].clone()
+            ref_tar_rot = self._curr_ref_obs[:, 66:66+4].clone()
+        elif self.hand_model == "allegro":        
+            ref_tar_pos = self._curr_ref_obs[:, 51:51+3].clone()
+            ref_tar_rot = self._curr_ref_obs[:, 54:54+4].clone()
 
-        ref_tar_pos = self._curr_ref_obs[:, 109:109+3].clone()
-        ref_tar_rot = self._curr_ref_obs[:, 112:112+4].clone()
+        
         self._ref_target_keypoints_per_epoch, self._ref_target_keypoints_vectors_per_epoch = self.extract_keypoints_per_epoch(ref_tar_pos, ref_tar_rot)
-
         mts = self.motion_times_total[env_ids]
         num_key = len(self._key_body_ids)
-        next_target_obj_pos = self.hoi_data_batch[env_ids,ts][:,109:109+3].clone()
-        next_target_obj_quat = self.hoi_data_batch[env_ids,ts][:,112:112+4].clone()
-        next_target_key_pos = self.hoi_data_batch[env_ids,ts][:,119:119+num_key*3].clone()
-        next_target_wrist_pos_vel = self.hoi_data_batch[env_ids,ts][:,58:58+3].clone() # no use
+        if self.hand_model == "mano":
+            next_target_obj_pos = self.hoi_data_batch[env_ids,ts][:,109:109+3].clone()
+            next_target_obj_quat = self.hoi_data_batch[env_ids,ts][:,112:112+4].clone()
+            next_target_key_pos = self.hoi_data_batch[env_ids,ts][:,119:119+num_key*3].clone()
+            next_target_wrist_pos_vel = self.hoi_data_batch[env_ids,ts][:,58:58+3].clone()
+        elif self.hand_model == "shadow":        
+            next_target_obj_pos = self.hoi_data_batch[env_ids,ts][:,63:63+3].clone().clone()
+            next_target_obj_quat = self.hoi_data_batch[env_ids,ts][:,66:66+4].clone().clone()
+            next_target_key_pos = self.hoi_data_batch[env_ids,ts][:,73:73+num_key*3].clone()
+            next_target_wrist_pos_vel = self.hoi_data_batch[env_ids,ts][:,35:35+3].clone()
+        elif self.hand_model == "allegro":        
+            next_target_obj_pos = self.hoi_data_batch[env_ids,ts][:,51:51+3].clone()
+            next_target_obj_quat = self.hoi_data_batch[env_ids,ts][:,54:54+4].clone()
+            next_target_key_pos = self.hoi_data_batch[env_ids,ts][:,61:61+num_key*3].clone()
+            next_target_wrist_pos_vel = self.hoi_data_batch[env_ids,ts][:,29:29+3].clone()
+
         next_target_contact = self.hoi_data_batch[env_ids,ts][:, -2:-1].clone()
 
         wrist_pos = self._rigid_body_pos[env_ids, self._key_body_ids[-1], :].clone()
@@ -318,8 +348,16 @@ class SkillMimicBallPlay(HumanoidWholeBodyWithObjectPlane):
             ref_motion = [self._motion_data.hoi_data_dict[mid.item()]['hoi_data'][key_frame_times[idx]].clone()
                                   for idx, mid in enumerate(self.motion_ids_total[env_ids])]
             key_ref_motion = torch.stack(ref_motion, dim=0) # (num_envs, 5, dim)
-            seq_target_obj_pos = key_ref_motion[:,:,109:109+3].clone()
-            seq_target_key_pos = key_ref_motion[:,:,119:119+num_key*3].clone()
+            if self.hand_model == "mano":
+                seq_target_obj_pos = key_ref_motion[:,:,109:109+3].clone()
+                seq_target_key_pos = key_ref_motion[:,:,119:119+num_key*3].clone()
+            elif self.hand_model == "shadow":                
+                seq_target_obj_pos = key_ref_motion[:,:,63:63+3].clone()
+                seq_target_key_pos = key_ref_motion[:,:,73:73+num_key*3].clone()
+            elif self.hand_model == "allegro":                
+                seq_target_obj_pos = key_ref_motion[:,:,51:51+3].clone()
+                seq_target_key_pos = key_ref_motion[:,:,61:61+num_key*3].clone() 
+
             seq_target_obj_pos, seq_target_key_pos, seq_target_key_pos_residual = \
             compute_local_future_target(wrist_pos, wrist_rot, num_key, num_key_frames,
                                         seq_target_obj_pos, seq_target_key_pos, current_key_pos)
@@ -368,7 +406,8 @@ class SkillMimicBallPlay(HumanoidWholeBodyWithObjectPlane):
                                                   self._enable_ig_scale,
                                                   self._ref_target_keypoints_per_epoch,
                                                   self._obs_target_keypoints_per_epoch,
-                                                  self._enable_ig_plus_reward
+                                                  self._enable_ig_plus_reward,
+                                                  self.hand_model
                                                   )
         return
     
@@ -390,6 +429,7 @@ class SkillMimicBallPlay(HumanoidWholeBodyWithObjectPlane):
                                                   self._ref_target_keypoints_per_epoch,
                                                   self._obs_target_keypoints_per_epoch,
                                                   self._enable_ig_plus_reward,
+                                                  self.hand_model
                                                   )
         return
     
@@ -488,10 +528,22 @@ class SkillMimicBallPlay(HumanoidWholeBodyWithObjectPlane):
         ts = self.progress_buf.clone()
         target_indices = torch.where((ts + 1) < max_indices, ts + 1, max_indices)
         ts_data = self.hoi_data_batch[torch.arange(self.num_envs, device=self.device), target_indices].clone()
-        self._traj_states[:, :7] = ts_data[...,109:116]
-        self._traj_states[:, 7:] = 0.0
+        
+        if self.hand_model == "mano":
+            self._traj_states[:, :7] = ts_data[...,109:116]
+            self._traj_states[:, 7:] = 0.0
 
-        self._keypose_traj_states[..., :3] = ts_data[..., 119:119+3*16].reshape(self.num_envs, 16, 3)
+            self._keypose_traj_states[..., :3] = ts_data[..., 119:119+3*16].reshape(self.num_envs, 16, 3)
+        elif self.hand_model == "shadow":
+            self._traj_states[:, :7] = ts_data[...,63:70]
+            self._traj_states[:, 7:] = 0.0
+
+            self._keypose_traj_states[..., :3] = ts_data[..., 73:73+3*23].reshape(self.num_envs, 23, 3)
+        elif self.hand_model == "allegro":
+            self._traj_states[:, :7] = ts_data[...,51:58]
+            self._traj_states[:, 7:] = 0.0
+            self._keypose_traj_states[..., :3] = ts_data[..., 61:61+3*17].reshape(self.num_envs, 17, 3)
+
         self.gym.set_actor_root_state_tensor_indexed(
             self.sim, 
             gymtorch.unwrap_tensor(self._root_states),
@@ -503,9 +555,18 @@ class SkillMimicBallPlay(HumanoidWholeBodyWithObjectPlane):
         super()._set_traj_current()
         ts = self.progress_buf.clone()
         ts_data = self.hoi_data_batch[torch.arange(self.num_envs, device=self.device), ts].clone()
-        self._traj_states[:, :7] = ts_data[..., 109:116]
-        self._traj_states[:, 7:] = 0.0
-        self._keypose_traj_states[..., :3] = ts_data[..., 119:119+3*16].reshape(self.num_envs, 16, 3)
+        if self.hand_model == "mano":
+            self._traj_states[:, :7] = ts_data[..., 109:116]
+            self._traj_states[:, 7:] = 0.0
+            self._keypose_traj_states[..., :3] = ts_data[..., 119:119+3*16].reshape(self.num_envs, 16, 3)
+        elif self.hand_model == "shadow":       
+            self._traj_states[:, :7] = ts_data[..., 63:70]
+            self._traj_states[:, 7:] = 0.0
+            self._keypose_traj_states[..., :3] = ts_data[..., 73:73+3*23].reshape(self.num_envs, 23, 3)
+        elif self.hand_model == "allegro":                    
+            self._traj_states[:, :7] = ts_data[..., 51:58]
+            self._traj_states[:, 7:] = 0.0
+            self._keypose_traj_states[..., :3] = ts_data[..., 61:61+3*17].reshape(self.num_envs, 17, 3)         
 
         self.gym.set_actor_root_state_tensor_indexed(
             self.sim, 
@@ -531,10 +592,21 @@ class SkillMimicBallPlay(HumanoidWholeBodyWithObjectPlane):
         )    
         ts_data = hoi_data[torch.arange(self.num_envs, device=self.device), target_indices].clone()
 
-        self._traj_states[:, :7] = ts_data[...,109:116]
-        self._traj_states[:, 7:] = 0.0
+        if self.hand_model == "mano":
+            self._traj_states[:, :7] = ts_data[...,109:116]
+            self._traj_states[:, 7:] = 0.0
 
-        self._keypose_traj_states[..., :3] = ts_data[..., 119:119+3*16].reshape(self.num_envs, 16, 3)
+            self._keypose_traj_states[..., :3] = ts_data[..., 119:119+3*16].reshape(self.num_envs, 16, 3)
+        elif self.hand_model == "shadow":
+            self._traj_states[:, :7] = ts_data[...,63:70]
+            self._traj_states[:, 7:] = 0.0
+
+            self._keypose_traj_states[..., :3] = ts_data[..., 73:73+3*23].reshape(self.num_envs, 23, 3)
+        elif self.hand_model == "allegro":
+            self._traj_states[:, :7] = ts_data[...,51:58]
+            self._traj_states[:, 7:] = 0.0
+
+            self._keypose_traj_states[..., :3] = ts_data[..., 61:61+3*17].reshape(self.num_envs, 17, 3)
         self._target_traj_actor_ids = torch.cat([self._tar_actor_ids, self._traj_actor_ids], dim=-1)
         self.gym.set_actor_root_state_tensor_indexed(
             self.sim, 
@@ -948,91 +1020,115 @@ def compute_humanoid_reward(hoi_ref: Tensor, hoi_obs: Tensor, hoi_obs_hist: Tens
                             tar2_contact_forces: Tensor, len_keypos: int, 
                             w: Dict[str, Tensor], skill_label: Tensor, enable_ig_scale: bool, 
                             ref_obj_keypoints: Tensor,
-                            obs_obj_keypoints: Tensor, enable_ig_plus_reward: bool) -> Tensor:
+                            obs_obj_keypoints: Tensor, enable_ig_plus_reward: bool,hand_model) -> Tensor:
 
     ### data preprocess ###
 
     #when rot = quat
-    root_pos = hoi_obs[:,:3]
-    root_rot = hoi_obs[:,3:3+4]
-    wrist_pos = hoi_obs[:,7:7+3]
-    wrist_rot = hoi_obs[:,10:10+3]
-    dof_pos = hoi_obs[:,13:13+15*3]
-    wrist_pos_vel = hoi_obs[:,58:58+3]
-    dof_pos_vel = hoi_obs[:,58:58+17*3]
-    obj_pos = hoi_obs[:,109:109+3]
-    obj_rot = hoi_obs[:,112:112+4]
-    obj_pos_vel = hoi_obs[:,116:116+3]
-    # obj2_start = 116+3
-    # obj2_pos = hoi_obs[:,119:119+3]
-    # obj2_rot = hoi_obs[:,122:122+4]
-    # obj2_pos_vel = hoi_obs[:,126:126+3]
-    key_pos = hoi_obs[:,119:119+len_keypos*3]
-    # contact = hoi_obs[:,-1:]# fake one
+    if hand_model=="mano":
+        root_pos = hoi_obs[:,:3]
+        root_rot = hoi_obs[:,3:3+4]
+        wrist_pos = hoi_obs[:,7:7+3]
+        wrist_rot = hoi_obs[:,10:10+3]
+        dof_pos = hoi_obs[:,13:13+15*3]
+        wrist_pos_vel = hoi_obs[:,58:58+3]
+        dof_pos_vel = hoi_obs[:,58:58+17*3]
+        obj_pos = hoi_obs[:,109:109+3]
+        obj_rot = hoi_obs[:,112:112+4]
+        obj_pos_vel = hoi_obs[:,116:116+3]
+        key_pos = hoi_obs[:,119:119+len_keypos*3]
+    elif hand_model=="shadow":
+        root_pos = hoi_obs[:,:3]
+        root_rot = hoi_obs[:,3:3+4]
+        wrist_pos = hoi_obs[:,7:7+3]
+        wrist_rot = hoi_obs[:,10:10+3]
+        dof_pos = hoi_obs[:,13:13+22]
+        wrist_pos_vel = hoi_obs[:,35:35+3]
+        dof_pos_vel = hoi_obs[:,35:35+28]
+        obj_pos = hoi_obs[:,63:63+3]
+        obj_rot = hoi_obs[:,66:66+4]
+        obj_pos_vel = hoi_obs[:,70:70+3]
+        key_pos = hoi_obs[:,73:73+len_keypos*3]
+    elif hand_model=="allegro":
+        root_pos = hoi_obs[:,:3]
+        root_rot = hoi_obs[:,3:3+4]
+        wrist_pos = hoi_obs[:,7:7+3]
+        wrist_rot = hoi_obs[:,10:10+3]
+        dof_pos = hoi_obs[:,13:13+16]
+        wrist_pos_vel = hoi_obs[:,29:29+3]
+        dof_pos_vel = hoi_obs[:,29:29+22]
+        obj_pos = hoi_obs[:,51:51+3]
+        obj_rot = hoi_obs[:,54:54+4]
+        obj_pos_vel = hoi_obs[:,58:58+3]
+        key_pos = hoi_obs[:,61:61+len_keypos*3]
     ###################################################
-    # key_pos = torch.cat((root_pos, key_pos),dim=-1)
-    # body_rot = torch.cat((root_rot, dof_pos),dim=-1)
+
     ig = key_pos.view(-1,len_keypos,3).transpose(0,1) - obj_pos[:,:3]
     # ig_wrist = ig.transpose(0,1)[:,0:7+1,:].view(-1,(7+1)*3) #ZC
     ig = ig.transpose(0,1).view(-1,(len_keypos)*3)
 
-    # ig2 = obj2_pos[:,:3] - obj_pos[:,:3]
-
     #TODO: add relative rot error
 
     ##############################################################changed by me
-    dof_pos_vel_hist = hoi_obs_hist[:,58:58+17*3] #ZC
+    # dof_pos_vel_hist = hoi_obs_hist[:,58:58+17*3] #ZC
     
     
     # reference states
-    ref_root_pos = hoi_ref[:,:3]
-    ref_root_rot = hoi_ref[:,3:3+4]
-    ref_wrist_pos = hoi_ref[:,7:7+3]
-    ref_wrist_rot = hoi_ref[:,10:10+3]
-    ref_dof_pos = hoi_ref[:,13:13+15*3]
-    ref_wrist_pos_vel = hoi_ref[:,58:58+3]
-    ref_dof_pos_vel = hoi_ref[:,58:58+17*3]
-    ref_obj_pos = hoi_ref[:,109:109+3]
-    ref_obj_rot = hoi_ref[:,112:112+4]
-    ref_obj_pos_vel = hoi_ref[:,116:116+3]
-    # obj2_start = 116+3
-    # ref_obj2_pos = hoi_ref[:,119:119+3]
-    # ref_obj2_rot = hoi_ref[:,122:122+4]
-    # ref_obj2_pos_vel = hoi_ref[:,126:126+3] # total 175 dim
-    ref_key_pos = hoi_ref[:,119:119+len_keypos*3]
-    ref_obj_contact = hoi_ref[:,-2:]
-    ref_obj2_contact = hoi_ref[:,-1:]
-
+    if hand_model=="mano":
+        ref_root_pos = hoi_ref[:,:3]
+        ref_root_rot = hoi_ref[:,3:3+4]
+        ref_wrist_pos = hoi_ref[:,7:7+3]
+        ref_wrist_rot = hoi_ref[:,10:10+3]
+        ref_dof_pos = hoi_ref[:,13:13+15*3]
+        ref_wrist_pos_vel = hoi_ref[:,58:58+3]
+        ref_dof_pos_vel = hoi_ref[:,58:58+17*3]
+        ref_obj_pos = hoi_ref[:,109:109+3]
+        ref_obj_rot = hoi_ref[:,112:112+4]
+        ref_obj_pos_vel = hoi_ref[:,116:116+3]
+        ref_key_pos = hoi_ref[:,119:119+len_keypos*3]
+        ref_obj_contact = hoi_ref[:,-2:]
+        ref_obj2_contact = hoi_ref[:,-1:]
+    elif hand_model=="shadow":
+        ref_root_pos = hoi_ref[:,:3]
+        ref_root_rot = hoi_ref[:,3:3+4]
+        ref_wrist_pos = hoi_ref[:,7:7+3]
+        ref_wrist_rot = hoi_ref[:,10:10+3]
+        ref_dof_pos = hoi_ref[:,13:13+22]
+        ref_wrist_pos_vel = hoi_ref[:,35:35+3]
+        ref_dof_pos_vel = hoi_ref[:,35:35+28]
+        ref_obj_pos = hoi_ref[:,63:63+3]
+        ref_obj_rot = hoi_ref[:,66:66+4]
+        ref_obj_pos_vel = hoi_ref[:,70:70+3]
+        ref_key_pos = hoi_ref[:,73:73+len_keypos*3]
+        ref_obj_contact = hoi_ref[:,-2:]
+    elif hand_model=="allegro":
+        ref_root_pos = hoi_ref[:,:3]
+        ref_root_rot = hoi_ref[:,3:3+4]
+        ref_wrist_pos = hoi_ref[:,7:7+3]
+        ref_wrist_rot = hoi_ref[:,10:10+3]
+        ref_dof_pos = hoi_ref[:,13:13+16]
+        ref_wrist_pos_vel = hoi_ref[:,29:29+3]
+        ref_dof_pos_vel = hoi_ref[:,29:29+22]
+        ref_obj_pos = hoi_ref[:,51:51+3]
+        ref_obj_rot = hoi_ref[:,54:54+4]
+        ref_obj_pos_vel = hoi_ref[:,58:58+3]
+        ref_key_pos = hoi_ref[:,61:61+len_keypos*3]
+        ref_obj_contact = hoi_ref[:,-2:]
+        
+        
     ##########################################################################
-    # ref_key_pos = torch.cat((ref_root_pos, ref_key_pos),dim=-1)
-    # ref_body_rot = torch.cat((ref_root_rot, ref_dof_pos),dim=-1)
     ref_ig = ref_key_pos.view(-1,len_keypos,3).transpose(0,1) - ref_obj_pos[:,:3]
-    # ref_ig_wrist = ref_ig.transpose(0,1)[:,0:7+1,:].view(-1,(7+1)*3) #ZC
     ref_ig = ref_ig.transpose(0,1).view(-1,(len_keypos)*3)
-
-    # ref_ig2 = ref_obj2_pos[:,:3] - ref_obj_pos[:,:3]
 
     ####################### Part1: body reward #######################
     # body pos reward
     ep = torch.mean((ref_key_pos - key_pos)**2,dim=-1)
-    # ep = torch.mean((ref_key_pos[:,0:(7+1)*3] - key_pos[:,0:(7+1)*3])**2,dim=-1) #ZC
     rp = torch.exp(-ep*w['p'])
 
     # body rot reward
     er = torch.mean((ref_dof_pos - dof_pos)**2,dim=-1)
     rr = torch.exp(-er*w['r'])
-    # ref_dof_pos = ref_dof_pos.view(-1,15,3)
-    # ref_dof_pos = quat_from_euler_xyz(ref_dof_pos[..., 0], ref_dof_pos[..., 1], ref_dof_pos[..., 2]) # euler
-    # ref_dof_pos = ref_dof_pos / torch.norm(ref_dof_pos, dim=-1, keepdim=True)
-    # dof_pos = dof_pos.view(-1,15,3)
-    # dof_pos = quat_from_euler_xyz(dof_pos[..., 0], dof_pos[..., 1], dof_pos[..., 2])
-    # dof_pos = dof_pos / torch.norm(dof_pos, dim=-1, keepdim=True)
-    # dot = torch.mean(torch.sum(ref_dof_pos*dof_pos,dim=-1)**2,dim=-1)
-    # dot = torch.clamp(dot, -1.0, 1.0)
-    # er = 2 * torch.acos(torch.abs(dot)) / torch.pi  # 取绝对值避免反向旋转干扰
-    # rr = torch.exp(-er*w['r'])
     rb = rp*rr
-
     ####################### Part1.5: wrist reward #######################
     ewp = torch.mean((ref_wrist_pos - wrist_pos)**2,dim=-1)
     rwp = torch.exp(-ewp*20)
@@ -1050,6 +1146,7 @@ def compute_humanoid_reward(hoi_ref: Tensor, hoi_obs: Tensor, hoi_obs_hist: Tens
     rwpv = torch.exp(-ewpv*20)
 
     rw = rwp*rwr
+    
     # only apply rwpv when the object is in contact
     obj_contact = torch.any(torch.abs(tar_contact_forces[..., 0:2]) > 0.1, dim=-1).to(torch.float) # =1 when contact happens to the object
     rw = torch.where((obj_contact == 1) & (skill_label!=8), rw*rwpv, rw)
@@ -1060,8 +1157,6 @@ def compute_humanoid_reward(hoi_ref: Tensor, hoi_obs: Tensor, hoi_obs_hist: Tens
     rop = torch.exp(-eop*w['op'])
 
     # object rot reward
-    # ref_obj_rot = torch_utils.quat_to_exp_map(ref_obj_rot)
-    # obj_rot = torch_utils.quat_to_exp_map(obj_rot)
     dot = torch.sum(ref_obj_rot*obj_rot,dim=-1)
     obj_rot_adjusted = torch.where(dot.unsqueeze(-1)<0, -obj_rot, obj_rot)
     eor = torch.mean((ref_obj_rot - obj_rot_adjusted)**2,dim=-1)
@@ -1071,22 +1166,7 @@ def compute_humanoid_reward(hoi_ref: Tensor, hoi_obs: Tensor, hoi_obs_hist: Tens
     eopv = torch.mean((ref_obj_pos_vel - obj_pos_vel)**2,dim=-1)
     ropv = torch.exp(-eopv*w['opv'])
 
-    # # object rot vel reward
-    # eorv = torch.zeros_like(ep) #torch.mean((ref_obj_rot_vel - obj_rot_vel)**2,dim=-1)
-    # rorv = torch.exp(-eorv*w['orv'])
-
     ro = rop*ror*ropv#*rokp*rorv
-
-    # # object keyposition reward #wyh20240225
-    # if enable_obj_keypoints_reward:
-    #     ref_obj_keypoints = transform_keypoints_batch(obj_keypoints, ref_obj_pos, ref_obj_rot) # [n, 20, 3]
-    #     curr_obj_keypoints = transform_keypoints_batch(obj_keypoints, obj_pos, obj_rot) # [n, 20, 3]
-    #     ref_obj_keypoints = ref_obj_keypoints.view(-1,20*3)
-    #     curr_obj_keypoints = curr_obj_keypoints.view(-1,20*3)
-    #     eokp = torch.mean((ref_obj_keypoints - curr_obj_keypoints)**2,dim=-1)
-    #     rokp = torch.exp(-20*eokp)
-    #     ro *= rokp
-
 
     ####################### Part3: interaction graph reward #######################
     eig = torch.mean((ref_ig - ig)**2,dim=-1) #Zw
@@ -1134,32 +1214,6 @@ def compute_humanoid_reward(hoi_ref: Tensor, hoi_obs: Tensor, hoi_obs_hist: Tens
     # only rb*rw for free_move
     reward = torch.where((skill_label!=9), reward, rb * rw)
 
-    # ####################### Part5: contact force reward #######################
-    # # stable contact reward
-    # contact_mask = (contact_buf != 0).any(dim=-1).unsqueeze(-1) 
-    # sum_per_dim = (contact_buf.abs() * contact_mask).sum(dim=1)  # (num_envs, 3)
-    # valid_counts = contact_mask.sum(dim=1)  # (num_envs, 1)
-    # mean_per_dim = sum_per_dim / valid_counts.clamp(min=1e-6)  # (num_envs, 3)
-    # env_contact_forces = mean_per_dim.sum(dim=-1)
-    # ecf = torch.minimum(env_contact_forces - 300, torch.tensor(0.0))
-    # ecf = torch.abs(ecf)
-    # rcf = torch.exp(-ecf*0.05)
-    # rcf = torch.where((ref_obj_contact[:, 0] == 0) | (ref_obj_contact[:, 0] == -1), \
-    #                   torch.tensor(1.0, device=rcg2.device), rcf)
-
-    # # timel release the object reward
-    # contact_mask = (contact_buf != 0).any(dim=-1).unsqueeze(-1) 
-    # sum_per_dim = (contact_buf.abs() * contact_mask).sum(dim=1)  # (num_envs, 3)
-    # valid_counts = contact_mask.sum(dim=1)  # (num_envs, 1)
-    # mean_per_dim = sum_per_dim / valid_counts.clamp(min=1e-6)  # (num_envs, 3)
-    # env_contact_forces = mean_per_dim.sum(dim=-1)
-    # encf = torch.maximum(env_contact_forces, torch.tensor(0.0))
-    # rncf = torch.exp(-encf*0.05)
-    # rncf = torch.where((ref_obj_contact[:, 0] == 1) | (ref_obj_contact[:, 0] == -1), \
-    #                   torch.tensor(1.0, device=rcg2.device), rncf)
-    # reward = torch.where((skill_label!=1), reward, reward * rcf) # use contact force reward for grasp
-    # reward = torch.where((skill_label!=3), reward, reward * rncf) # use non-contact force reward for grasp
-
     return reward
 
 
@@ -1168,23 +1222,31 @@ def compute_metrics(hoi_ref: Tensor, hoi_obs: Tensor, hoi_obs_hist: Tensor,
                             contact_buf: Tensor, tar_contact_forces: Tensor, 
                             tar2_contact_forces: Tensor, len_keypos: int, 
                             w: Dict[str, Tensor], skill_label: Tensor, enable_ig_scale: bool, ref_obj_keypoints: Tensor,
-                            obs_obj_keypoints: Tensor, enable_ig_plus_reward: bool) -> Tuple[Tensor, Tensor, Tensor, Tensor]:
-    obj_pos = hoi_obs[:,109:109+3]
-    obj_rot = hoi_obs[:,112:112+4]
-    key_pos = hoi_obs[:,119:119+len_keypos*3]
+                            obs_obj_keypoints: Tensor, enable_ig_plus_reward: bool,hand_model="mano") -> Tuple[Tensor, Tensor, Tensor, Tensor]:
+    if hand_model=="mano":
+        obj_pos = hoi_obs[:,109:109+3]
+        obj_rot = hoi_obs[:,112:112+4]
+        key_pos = hoi_obs[:,119:119+len_keypos*3]
+        ref_obj_pos = hoi_ref[:,109:109+3]
+        ref_obj_rot = hoi_ref[:,112:112+4]
+        ref_key_pos = hoi_ref[:,119:119+len_keypos*3]
+    elif hand_model=="shadow":
+        obj_pos = hoi_obs[:,63:63+3]
+        obj_rot = hoi_obs[:,66:66+4]
+        key_pos = hoi_obs[:,73:73+len_keypos*3]
+        ref_obj_pos = hoi_ref[:,63:63+3]
+        ref_obj_rot = hoi_ref[:,66:66+4]
+        ref_key_pos = hoi_ref[:,73:73+len_keypos*3]
+    elif hand_model=="allegro":
+        obj_pos = hoi_obs[:,51:51+3]
+        obj_rot = hoi_obs[:,54:54+4]
+        key_pos = hoi_obs[:,61:61+len_keypos*3]
+        ref_obj_pos = hoi_ref[:,51:51+3]
+        ref_obj_rot = hoi_ref[:,54:54+4]
+        ref_key_pos = hoi_ref[:,61:61+len_keypos*3]
 
-    ref_obj_pos = hoi_ref[:,109:109+3]
-    ref_obj_rot = hoi_ref[:,112:112+4]
-    ref_key_pos = hoi_ref[:,119:119+len_keypos*3]
-
-    # when E_or = 0,0,0,0 mean there is no longer ref data
     zero_quat_mask = torch.all(ref_obj_rot == 0, dim=-1)
-
     # Object positional error
-    # E_op = torch.norm(ref_obj_pos - obj_pos, dim=1) # shape (num_envs)
-    # E_op = torch.where(zero_quat_mask, torch.tensor(0.0, device=ref_obj_rot.device), E_op)
-    #ref_obj_keypoints = transform_keypoints_batch(obj_keypoints, ref_obj_pos, ref_obj_rot) # [n, 20, 3]
-    #curr_obj_keypoints = transform_keypoints_batch(obj_keypoints, obj_pos, obj_rot) # [n, 20, 3]
     num_obj_keypoiint = ref_obj_keypoints.shape[1]
     ref_obj_keypoints = ref_obj_keypoints.view(-1,num_obj_keypoiint*3)
     curr_obj_keypoints = obs_obj_keypoints.view(-1,num_obj_keypoiint*3)
