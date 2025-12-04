@@ -22,7 +22,7 @@ or you can
 bash teacher_train_stage1.sh
 ```
 
-## Stage1
+## Train Stage2
 ```
 CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task SkillMimicHandRand \
 --num_envs 4096 \
