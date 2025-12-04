@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # 要使用的GPU设备列表
-GPUS=(0 1 4 5 6 7)
+GPUS=(0)
 
 # 对象列表 - 根据您的实际对象修改
-OBJECTS=("Flyingdisc" "Book" "Pizza" "Stapler" "Pencil" "Airplane")
+OBJECTS=("Bottle")
 
 # 检查对象数量和GPU数量是否匹配
 if [ ${#OBJECTS[@]} -ne ${#GPUS[@]} ]; then
@@ -33,9 +33,9 @@ for i in "${!GPUS[@]}"; do
         --task SkillMimicHandRand \
         --num_envs 4096 \
         --episode_length 60 \
-        --cfg_env skillmimic/data/cfg/mano/mano_stage1_precise_tracking.yaml \
+        --cfg_env skillmimic/data/cfg/mano/mano_stage1_precise_track.yaml \
         --cfg_train skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml \
-        --motion_file \"skillmimic/data/motions/dexgrasp_train_mano_20obj/$obj_lower\" \
+	--motion_file \"skillmimic/data/motions/dexgrasp_train_mano_gmp/$obj_lower\" \
         --state_noise_prob 0.2 \
         --enable_obj_keypoints \
         --enable_ig_scale \

@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # 要使用的GPU设备列表
-GPUS=(0 1 4 5 6 7)
+GPUS=(0)
 
 # 对象列表 - 根据您的实际对象修改
-OBJECTS=("Flyingdisc" "Book" "Pizza" "Stapler" "Pencil" "Airplane")
+OBJECTS=("Bottle")
 
 # 检查对象数量和GPU数量是否匹配
 if [ ${#OBJECTS[@]} -ne ${#GPUS[@]} ]; then
@@ -25,7 +25,18 @@ for i in "${!GPUS[@]}"; do
     gpu=${GPUS[$i]}
     obj=${OBJECTS[$i]}
     obj_lower=$(echo "$obj" | tr '[:upper:]' '[:lower:]')
+    LATEST_OUTPUT_DIR=$(ls -td output/skillmimic_${obj_lower}_gpu*_new_* 2>/dev/null | head -1)
     
+    RESUME_ARG=""
+    
+    if [ -n "$LATEST_OUTPUT_DIR" ]; then
+        # 在找到的输出目录的nn子目录中查找最新的pth文件
+        LATEST_CKPT=$(ls -t ${LATEST_OUTPUT_DIR}/nn/*.pth 2>/dev/null | head -1)
+        if [ -n "$LATEST_CKPT" ]; then
+            RESUME_ARG="--resume_from \"$LATEST_CKPT\""
+            echo "找到checkpoint: $LATEST_CKPT"
+        fi
+    fi
     echo "=== 在 GPU $gpu 上运行对象: $obj ($obj_lower) ==="
     
     # 构建完整的命令 - 使用 -u 参数禁用输出缓冲
@@ -35,7 +46,7 @@ for i in "${!GPUS[@]}"; do
         --episode_length 60 \
         --cfg_env skillmimic/data/cfg/mano/mano_stage2_noisey_generalize.yaml \
         --cfg_train skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml \
-        --motion_file \"skillmimic/data/motions/dexgrasp_train_mano_20obj/$obj_lower\" \
+        --motion_file \"skillmimic/data/motions/dexgrasp_train_mano_gmp/$obj_lower\" \
         --state_noise_prob 0.5 \
         --obj_rand_scale \
         --enable_obj_keypoints \
@@ -45,8 +56,8 @@ for i in "${!GPUS[@]}"; do
         --enable_early_termination \
         --headless \
         --objnames \"$obj\" \
-        --experiment \"skillmimic_${obj_lower}_gpu${gpu}_new\"\
-        --resume_from \"/data/sjg/lxy/Multi/checkpoint/teachers/SkillMimic_sword.pth\"  \
+        --experiment \"skillmimic_${obj_lower}_gpu${gpu}_finetune\"\
+        $RESUME_ARG  \
         --max_iterations 10000 "
     
     # 输出将要运行的命令
