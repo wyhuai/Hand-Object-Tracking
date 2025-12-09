@@ -249,20 +249,28 @@ CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task SkillMimicHandRand \
 --checkpoint checkpoint/allegro/allegro_bottle_grasp-move-place.pth
 ```
 
+Here is the updated documentation with the requested information about **Data Refinement** added before the distillation command.
+
+***
 
 ## Distillation 🧪
 
 This section covers the policy distillation process, designed to train a unified student policy capable of handling **multiple skills** or **multiple objects** simultaneously.
 
+> **⚠️ Important:** Before running the command, please modify `skillmimic/data/cfg/skillmimic_multiobjs_distill.yaml` & `skillmimic/data/cfg/skillmimic_distill.yaml` to specify:
+> *   **`obj_names`**: The list of objects you want to distill (e.g., `['Bottle', 'Box', ...]`).
+> *   **`teacher_ckpt`**: The file paths to the pre-trained teacher checkpoints for each corresponding object.
+
+### 💾 Data Preparation (Optional)
+To improve distillation performance, you can generate **physically plausible motion data** using the trained teacher policies.
+
+1.  Run the **Teacher Policy Inference** with the `--save_refine_data` flag.
+2.  Use the path of the saved data to replace the `--refined_motion_file` argument in the distillation command below.
+
 ### Multi-Skill Distillation
 Distill diverse skills (e.g., grasp, move, place) into a single policy.
 
-**Shell Shortcut:**
-```bash
-bash multiskill_distill.sh
-```
-
-**Full Command:**
+**Command:**
 ```bash
 # [Command coming soon]
 ```
@@ -270,25 +278,33 @@ bash multiskill_distill.sh
 ### Multi-Object Distillation
 Distill interaction skills across different objects (e.g., Bottle, Box, Hammer) into a single policy.
 
-**Shell Shortcut:**
+**Command:**
 ```bash
-bash multiobj_distill.sh
-```
-
-**Full Command:**
-```bash
-# [Command coming soon]
+DRI_PRIME=1 CUDA_VISIBLE_DEVICES=0  CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task MultiObjDistill \
+--num_envs 8192 \
+--episode_length 60 \
+--cfg_env skillmimic/data/cfg/skillmimic_multiobjs_distill.yaml \
+--cfg_train skillmimic/data/cfg/train/rlg/skillmimic_distill.yaml \
+--motion_file skillmimic/data/motions/dexgrasp_train_mano_20obj \
+--refined_motion_file skillmimic/data/motions/dexgrasp_train_mano_20obj \
+--state_noise_prob 0.3 \
+--enable_obj_keypoints \
+--enable_ig_scale \
+--enable_dof_obs \
+--use_delta_action \
+--enable_early_termination \
+--headless \
+--obj_rand_scale
 ```
 
 ### Inference
 For general testing, you can use the standard inference commands described in the MANO/Shadow/Allegro sections above (ensure you point to the distilled checkpoint).
 
 **For Multi-Object Distillation:**
-We provide a convenient script for testing multi-object policies:
+We provide a convenient script for testing multi-object policies. **Please modify the `CHECKPOINT_PATH` variable in `test.sh` to your own checkpoint path before running:**
 
 ```bash
 bash test.sh
-
 ```
 
 ## Citation 🔗
