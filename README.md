@@ -272,7 +272,21 @@ Distill diverse skills (e.g., grasp, move, place) into a single policy.
 
 **Command:**
 ```bash
-# [Command coming soon]
+DRI_PRIME=1 CUDA_VISIBLE_DEVICES=1  CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task Distill \
+--num_envs 1024 \
+--episode_length 60 \
+--cfg_env skillmimic/data/cfg/skillmimic_distill.yaml \
+--cfg_train skillmimic/data/cfg/train/rlg/skillmimic_distill.yaml \
+--motion_file skillmimic/data/motions/dexgrasp_train_mano_gmp/bottle \
+--refined_motion_file skillmimic/data/motions/dexgrasp_train_mano_gmp/bottle \
+--state_noise_prob 0.3 \
+--enable_obj_keypoints \
+--enable_ig_scale \
+--enable_dof_obs \
+--use_delta_action \
+--enable_early_termination \
+--headless \
+--obj_rand_scale
 ```
 
 ### Multi-Object Distillation
