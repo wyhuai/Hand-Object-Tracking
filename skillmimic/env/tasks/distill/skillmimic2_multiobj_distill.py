@@ -354,12 +354,10 @@ class MultiObjDistill(SkillMimicHandRand):
 
         # Time humanoid and object observation computation
         t0 = time.time()
-        if self._enable_wrist_local_obs:
-            humanoid_obs = self._compute_humanoid_local_obs(env_ids)
-            obj_obs = self._compute_obj_local_obs(env_ids)
-        else:
-            humanoid_obs = self._compute_humanoid_obs(env_ids)
-            obj_obs = self._compute_obj_obs(env_ids)
+
+        humanoid_obs = self._compute_humanoid_local_obs(env_ids)
+        obj_obs = self._compute_obj_local_obs(env_ids)
+
         self.timing_stats['compute_basic_obs'].append(time.time() - t0)
         if self.skill_labels[env_ids].shape != torch.Size([1]):
             obj_obs_cond = (self.skill_labels[env_ids]!=9).squeeze(0).unsqueeze(1)
@@ -409,22 +407,22 @@ class MultiObjDistill(SkillMimicHandRand):
 
         # Time local coordinate transformation
         t0 = time.time()
-        if self._enable_wrist_local_obs:
-            wrist_pos = self._rigid_body_pos[env_ids, self._key_body_ids[-1], :].clone()
-            wrist_rot = self._rigid_body_rot[env_ids, self._key_body_ids[-1], :].clone()
-            current_obj_pos = self._target_states[env_ids, :3].clone()
-            current_obj_quat = self._target_states[env_ids, 3:7].clone()
-            current_key_pos = self._rigid_body_pos[env_ids][:, self._key_body_ids, :].clone()
-            next_target_obj_pos, next_target_obj_pos_residual, next_target_obj_quat, next_target_obj_quat_residual, \
-            next_target_key_pos, next_target_key_pos_residual, next_target_wrist_pos_vel = \
-                compute_local_next_target(wrist_pos, wrist_rot, num_key, current_key_pos, current_obj_pos, current_obj_quat,
-                                            next_target_obj_pos, next_target_obj_quat, next_target_key_pos, next_target_wrist_pos_vel)
-            if self.refined_motion_as_obs:
-                next_target_obj_pos_refined, next_target_obj_pos_residual_refined, next_target_obj_quat_refined, next_target_obj_quat_residual_refined, \
-                next_target_key_pos_refined, next_target_key_pos_residual_refined, next_target_wrist_pos_vel_refined = \
-                compute_local_next_target(wrist_pos, wrist_rot, num_key, current_key_pos, current_obj_pos, current_obj_quat,
-                                            next_target_obj_pos_refined, next_target_obj_quat_refined, next_target_key_pos_refined, next_target_wrist_pos_vel_refined)
-        
+
+        wrist_pos = self._rigid_body_pos[env_ids, self._key_body_ids[-1], :].clone()
+        wrist_rot = self._rigid_body_rot[env_ids, self._key_body_ids[-1], :].clone()
+        current_obj_pos = self._target_states[env_ids, :3].clone()
+        current_obj_quat = self._target_states[env_ids, 3:7].clone()
+        current_key_pos = self._rigid_body_pos[env_ids][:, self._key_body_ids, :].clone()
+        next_target_obj_pos, next_target_obj_pos_residual, next_target_obj_quat, next_target_obj_quat_residual, \
+        next_target_key_pos, next_target_key_pos_residual, next_target_wrist_pos_vel = \
+            compute_local_next_target(wrist_pos, wrist_rot, num_key, current_key_pos, current_obj_pos, current_obj_quat,
+                                        next_target_obj_pos, next_target_obj_quat, next_target_key_pos, next_target_wrist_pos_vel)
+        if self.refined_motion_as_obs:
+            next_target_obj_pos_refined, next_target_obj_pos_residual_refined, next_target_obj_quat_refined, next_target_obj_quat_residual_refined, \
+            next_target_key_pos_refined, next_target_key_pos_residual_refined, next_target_wrist_pos_vel_refined = \
+            compute_local_next_target(wrist_pos, wrist_rot, num_key, current_key_pos, current_obj_pos, current_obj_quat,
+                                        next_target_obj_pos_refined, next_target_obj_quat_refined, next_target_key_pos_refined, next_target_wrist_pos_vel_refined)
+    
         self.timing_stats['local_transform'].append(time.time() - t0)
         # if self._enable_obj_zero:
         #     next_target_obj_pos = torch.zeros_like(next_target_obj_pos)
@@ -469,10 +467,10 @@ class MultiObjDistill(SkillMimicHandRand):
             key_ref_motion = torch.stack(ref_motion, dim=0) # (num_envs, 5, dim)
             seq_target_obj_pos = key_ref_motion[:,:,109:109+3].clone()
             seq_target_key_pos = key_ref_motion[:,:,119:119+num_key*3].clone()
-            if self._enable_wrist_local_obs:
-                seq_target_obj_pos, seq_target_key_pos, seq_target_key_pos_residual = \
-                compute_local_future_target(wrist_pos, wrist_rot, num_key, num_key_frames,
-                                            seq_target_obj_pos, seq_target_key_pos, current_key_pos)
+
+            seq_target_obj_pos, seq_target_key_pos, seq_target_key_pos_residual = \
+            compute_local_future_target(wrist_pos, wrist_rot, num_key, num_key_frames,
+                                        seq_target_obj_pos, seq_target_key_pos, current_key_pos)
 
             seq_target_obj_pos = seq_target_obj_pos.reshape(-1,num_key_frames*3) # (num_envs, 5*3)
             seq_target_key_pos = seq_target_key_pos.reshape(-1,num_key_frames*num_key*3) # (num_envs, 5*45/48)
@@ -520,7 +518,6 @@ class MultiObjDistill(SkillMimicHandRand):
         self.init_root_pos[env_ids], self.init_root_rot[env_ids],  self.init_root_pos_vel[env_ids], self.init_root_rot_vel[env_ids], \
         self.init_dof_pos[env_ids], self.init_dof_pos_vel[env_ids], \
         self.init_obj_pos[env_ids], self.init_obj_pos_vel[env_ids], self.init_obj_rot[env_ids], self.init_obj_rot_vel[env_ids], \
-        self.init_obj2_pos[env_ids], self.init_obj2_pos_vel[env_ids], self.init_obj2_rot[env_ids], self.init_obj2_rot_vel[env_ids] \
             = self._motion_data.get_initial_state(env_ids, motion_ids, motion_times)
 
         if self.refined_motion_as_obs:
@@ -528,7 +525,6 @@ class MultiObjDistill(SkillMimicHandRand):
             _, _,  _, _, \
             _, _, \
             _, _,  _, _, \
-            _, _,  _, _ \
                 = self._motion_data.get_initial_state(env_ids, motion_ids, motion_times)        
 
             # self.refined_hoi_data_batch[env_ids], \

@@ -290,20 +290,19 @@ class Distill(SkillMimicHandRand):
         next_target_wrist_pos_vel = self.hoi_data_batch[env_ids,ts][:,58:58+3].clone() # no use
         next_target_contact = self.hoi_data_batch[env_ids,ts][:, -2:-1].clone()
 
-        if self._enable_wrist_local_obs:
-            wrist_pos = self._rigid_body_pos[env_ids, self._key_body_ids[-1], :].clone()
-            wrist_rot = self._rigid_body_rot[env_ids, self._key_body_ids[-1], :].clone()
-            current_obj_pos = self._target_states[env_ids, :3].clone()
-            current_obj_quat = self._target_states[env_ids, 3:7].clone()
-            current_key_pos = self._rigid_body_pos[env_ids][:, self._key_body_ids, :].clone()
-            next_target_obj_pos, next_target_obj_pos_residual, next_target_obj_quat, next_target_obj_quat_residual, \
-            next_target_key_pos, next_target_key_pos_residual, next_target_wrist_pos_vel = \
-                compute_local_next_target(wrist_pos, wrist_rot, num_key, current_key_pos, current_obj_pos, current_obj_quat,
-                                            next_target_obj_pos, next_target_obj_quat, next_target_key_pos, next_target_wrist_pos_vel)
-            next_target_obj_pos_refined, next_target_obj_pos_residual_refined, next_target_obj_quat_refined, next_target_obj_quat_residual_refined, \
-            next_target_key_pos_refined, next_target_key_pos_residual_refined, next_target_wrist_pos_vel_refined = \
-                compute_local_next_target(wrist_pos, wrist_rot, num_key, current_key_pos, current_obj_pos, current_obj_quat,
-                                            next_target_obj_pos_refined, next_target_obj_quat_refined, next_target_key_pos_refined, next_target_wrist_pos_vel_refined)
+        wrist_pos = self._rigid_body_pos[env_ids, self._key_body_ids[-1], :].clone()
+        wrist_rot = self._rigid_body_rot[env_ids, self._key_body_ids[-1], :].clone()
+        current_obj_pos = self._target_states[env_ids, :3].clone()
+        current_obj_quat = self._target_states[env_ids, 3:7].clone()
+        current_key_pos = self._rigid_body_pos[env_ids][:, self._key_body_ids, :].clone()
+        next_target_obj_pos, next_target_obj_pos_residual, next_target_obj_quat, next_target_obj_quat_residual, \
+        next_target_key_pos, next_target_key_pos_residual, next_target_wrist_pos_vel = \
+            compute_local_next_target(wrist_pos, wrist_rot, num_key, current_key_pos, current_obj_pos, current_obj_quat,
+                                        next_target_obj_pos, next_target_obj_quat, next_target_key_pos, next_target_wrist_pos_vel)
+        next_target_obj_pos_refined, next_target_obj_pos_residual_refined, next_target_obj_quat_refined, next_target_obj_quat_residual_refined, \
+        next_target_key_pos_refined, next_target_key_pos_residual_refined, next_target_wrist_pos_vel_refined = \
+            compute_local_next_target(wrist_pos, wrist_rot, num_key, current_key_pos, current_obj_pos, current_obj_quat,
+                                        next_target_obj_pos_refined, next_target_obj_quat_refined, next_target_key_pos_refined, next_target_wrist_pos_vel_refined)
         tracking_obs = torch.cat((next_target_obj_pos, next_target_obj_quat, 
                                   next_target_key_pos, next_target_key_pos_residual, next_target_wrist_pos_vel,
                                   next_target_obj_pos_residual, next_target_obj_quat_residual), dim=-1)
@@ -343,13 +342,13 @@ class Distill(SkillMimicHandRand):
             seq_target_key_pos = key_ref_motion[:,:,119:119+num_key*3].clone()
             seq_target_obj_pos_refined = key_ref_motion_refined[:,:,109:109+3].clone()
             seq_target_key_pos_refined = key_ref_motion_refined[:,:,119:119+num_key*3].clone()
-            if self._enable_wrist_local_obs:
-                seq_target_obj_pos, seq_target_key_pos, seq_target_key_pos_residual = \
-                compute_local_future_target(wrist_pos, wrist_rot, num_key, num_key_frames,
-                                            seq_target_obj_pos, seq_target_key_pos, current_key_pos)
-                seq_target_obj_pos_refined, seq_target_key_pos_refined, seq_target_key_pos_residual_refined = \
-                compute_local_future_target(wrist_pos, wrist_rot, num_key, num_key_frames,
-                                            seq_target_obj_pos_refined, seq_target_key_pos_refined, current_key_pos)
+           
+            seq_target_obj_pos, seq_target_key_pos, seq_target_key_pos_residual = \
+            compute_local_future_target(wrist_pos, wrist_rot, num_key, num_key_frames,
+                                        seq_target_obj_pos, seq_target_key_pos, current_key_pos)
+            seq_target_obj_pos_refined, seq_target_key_pos_refined, seq_target_key_pos_residual_refined = \
+            compute_local_future_target(wrist_pos, wrist_rot, num_key, num_key_frames,
+                                        seq_target_obj_pos_refined, seq_target_key_pos_refined, current_key_pos)
 
             seq_target_obj_pos = seq_target_obj_pos.reshape(-1,num_key_frames*3) # (num_envs, 5*3)
             seq_target_key_pos = seq_target_key_pos.reshape(-1,num_key_frames*num_key*3) # (num_envs, 5*45/48)
@@ -420,14 +419,12 @@ class Distill(SkillMimicHandRand):
         self.init_root_pos[env_ids], self.init_root_rot[env_ids],  self.init_root_pos_vel[env_ids], self.init_root_rot_vel[env_ids], \
         self.init_dof_pos[env_ids], self.init_dof_pos_vel[env_ids], \
         self.init_obj_pos[env_ids], self.init_obj_pos_vel[env_ids], self.init_obj_rot[env_ids], self.init_obj_rot_vel[env_ids], \
-        self.init_obj2_pos[env_ids], self.init_obj2_pos_vel[env_ids], self.init_obj2_rot[env_ids], self.init_obj2_rot_vel[env_ids] \
             = self._motion_data.get_initial_state(env_ids, motion_ids, motion_times)
         if self.refined_motion_file:
             self.refined_hoi_data_batch[env_ids], \
             _, _,  _, _, \
             _, _, \
             _, _,  _, _, \
-            _, _,  _, _ \
                 = self._motion_data_refined.get_initial_state(env_ids, motion_ids, motion_times)        
 
             # self.refined_hoi_data_batch[env_ids], \

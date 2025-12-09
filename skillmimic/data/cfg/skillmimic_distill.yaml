@@ -11,7 +11,7 @@ env:
   bodyObjKeypoint: False
   distill: True
   
-  teacherPolicy: "checkpoint/distill_debug"
+  teacherPolicy: "checkpoint/multitask_teacher_checkpoints"
   teacherPolicyCFG: "skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml"
 
   pdControl: True
