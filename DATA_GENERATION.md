@@ -14,6 +14,8 @@ If you have already set up the main `skillmimic` environment, you only need to i
 ```bash
 pip install matplotlib
 pip install ikpy
+pip install pytorch-kinematics==0.7.0
+pip install viser
 ```
 
 ### Option B: Installation from scratch
@@ -100,22 +102,12 @@ The raw data generated above does not include key body position information. You
 
 **Command Template:**
 ```bash
-python skillmimic/run.py --test --task SkillMimicBallPlay \
---num_envs 1 --cfg_env skillmimic/data/cfg/[yaml].yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic.yaml \
---motion_file [motion_path] \
---object_asset skillmimic/data/assets/urdf/[object]/[object].urdf --hand_model [hand_model] \
---postproc_unihotdata --headless
+python skillmimic/utils/unihot_data_generation/read_pt.py --path [data_path] --hand [hand_name]
 ```
 
 **Example (Processing Box Data for MANO):**
 ```bash
-DRI_PRIME=1 python skillmimic/run.py --test --task SkillMimicBallPlay \
---num_envs 1 --cfg_env skillmimic/data/cfg/skillmimic.yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic.yaml \
---motion_file skillmimic/data/motions/dexgrasp_train_mano/box \
---object_asset skillmimic/data/assets/urdf/Box/Box.urdf --hand_model mano \
---postproc_unihotdata --headless
+python skillmimic/utils/unihot_data_generation/read_pt.py --path skillmimic/data/motions/dexgrasp_train_mano/box/grasp --hand mano
 ```
 *Output Location:* `skillmimic/data/motions/dexgrasp_train_mano/[object]/[skill]_kp`
 
