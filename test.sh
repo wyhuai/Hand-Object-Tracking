@@ -70,17 +70,17 @@ for obj in "${objects[@]}"; do
 
     # [Modified] Use $CHECKPOINT_PATH variable
     grasp_command="DRI_PRIME=1 CUDA_VISIBLE_DEVICES=1 CUDA_LAUNCH_BLOCKING=1 \
-    python skillmimic/run.py \
+    python hot/run.py \
         --test \
         --task SkillMimicHandRand \
         --num_envs 1024 \
-        --cfg_env skillmimic/data/cfg/mano/mano_stage1_precise_track.yaml \
-        --cfg_train skillmimic/data/cfg/train/rlg/skillmimic_large_mlp.yaml\
+        --cfg_env hot/data/cfg/mano/mano_stage1_precise_track.yaml \
+        --cfg_train hot/data/cfg/train/rlg/skillmimic_large_mlp.yaml\
         --enable_obj_keypoints \
         --enable_ig_scale \
         --checkpoint \"$CHECKPOINT_PATH\" \
         --state_init 2 \
-        --motion_file \"skillmimic/data/motions/dexgrasp_train_mano_20obj/${obj_lower}/grasp_kp\" \
+        --motion_file \"hot/data/motions/dexgrasp_train_mano_20obj/${obj_lower}/grasp_kp\" \
         --objnames \"$obj_upper\" \
         --headless \
         --use_delta_action \
@@ -102,17 +102,17 @@ for obj in "${objects[@]}"; do
 
     # [Modified] Use $CHECKPOINT_PATH variable
     place_command="DRI_PRIME=1 CUDA_VISIBLE_DEVICES=1 CUDA_LAUNCH_BLOCKING=1 \
-    python skillmimic/run.py \
+    python hot/run.py \
         --test \
         --task SkillMimicHandRand \
         --num_envs 1024 \
-        --cfg_env skillmimic/data/cfg/mano/mano_stage1_precise_track.yaml \
-        --cfg_train skillmimic/data/cfg/train/rlg/skillmimic_large_mlp.yaml\
+        --cfg_env hot/data/cfg/mano/mano_stage1_precise_track.yaml \
+        --cfg_train hot/data/cfg/train/rlg/skillmimic_large_mlp.yaml\
         --enable_obj_keypoints \
         --enable_ig_scale \
         --checkpoint \"$CHECKPOINT_PATH\" \
         --state_init 2 \
-        --motion_file \"skillmimic/data/motions/dexgrasp_train_mano_20obj/${obj_lower}/place_higher_kp\" \
+        --motion_file \"hot/data/motions/dexgrasp_train_mano_20obj/${obj_lower}/place_higher_kp\" \
         --objnames \"$obj_upper\" \
         --headless \
         --use_delta_action \
@@ -134,17 +134,17 @@ for obj in "${objects[@]}"; do
 
     # [Modified] Use $CHECKPOINT_PATH variable
     move_command="DRI_PRIME=1 CUDA_VISIBLE_DEVICES=1 CUDA_LAUNCH_BLOCKING=1 \
-    python skillmimic/run.py \
+    python hot/run.py \
         --test \
         --task SkillMimicHandRand \
         --num_envs 1024 \
-        --cfg_env skillmimic/data/cfg/mano/mano_stage1_precise_track.yaml \
-        --cfg_train skillmimic/data/cfg/train/rlg/skillmimic_large_mlp.yaml\
+        --cfg_env hot/data/cfg/mano/mano_stage1_precise_track.yaml \
+        --cfg_train hot/data/cfg/train/rlg/skillmimic_large_mlp.yaml\
         --enable_obj_keypoints \
         --enable_ig_scale \
         --checkpoint \"$CHECKPOINT_PATH\" \
         --state_init 2 \
-        --motion_file \"skillmimic/data/motions/dexgrasp_train_mano_20obj/${obj_lower}/move_higher_kp\" \
+        --motion_file \"hot/data/motions/dexgrasp_train_mano_20obj/${obj_lower}/move_higher_kp\" \
         --objnames \"$obj_upper\" \
         --headless \
         --use_delta_action \

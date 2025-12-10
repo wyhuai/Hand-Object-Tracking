@@ -1,7 +1,7 @@
 import torch
 import glob
 import os
-main_path =  'skillmimic/data/motions/dexgrasp_train_shadow/bottle/grasp_kp/*.pt'
+main_path =  'hot/data/motions/dexgrasp_train_shadow/bottle/grasp_kp/*.pt'
 paths = glob.glob(main_path)
 
 if 'allegro' in main_path:

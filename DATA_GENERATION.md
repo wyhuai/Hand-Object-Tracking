@@ -1,7 +1,7 @@
 # Data Generation & Processing Pipeline 🛠️
 
 This guide details the pipeline for generating basketball interaction skills and hand-object manipulation data from scratch. It covers two main parts:
-1.  **UniHot Motion Generation**: Generating dynamic motion data.
+1.  **HOP Motion Generation**: Generating dynamic motion data.
 2.  **DexGraspNet Static Grasps**: Generating static hand-object grasp poses.
 
 ---
@@ -47,20 +47,20 @@ python joint_monkey.py
 
 ---
 
-## Part 2: UniHot Motion Generation 🏃
+## Part 2: HOP Motion Generation 🏃
 
 ### 1. Generate Motions
 You can generate motion data for a specific object or a batch of objects.
 
 **For a specific object (e.g., box):**
 ```bash
-cd skillmimic/utils/unihot_data_generation
-python unihot_data_generator.py --obj_name box --asset_path ../../data/assets/urdf/Box/Box.urdf
+cd hot/utils/hop_data_generation
+python hop_data_generator.py --obj_name box --asset_path ../../data/assets/urdf/Box/Box.urdf
 ```
 
 **For a set of objects (Batch Processing):**
 ```bash
-cd skillmimic/utils/unihot_data_generation
+cd hot/utils/hop_data_generation
 ./open_selection.sh
 ```
 
@@ -69,11 +69,11 @@ Visualize the generated data *before* key body positions are calculated.
 
 **Command Template:**
 ```bash
-python skillmimic/run.py --test --task SkillMimicBallPlay \
---num_envs 1 --cfg_env skillmimic/data/cfg/[yaml].yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic.yaml \
+python hot/run.py --test --task SkillMimicBallPlay \
+--num_envs 1 --cfg_env hot/data/cfg/[yaml].yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic.yaml \
 --motion_file [motion_path] \
---object_asset skillmimic/data/assets/urdf/[object]/[object].urdf \
+--object_asset hot/data/assets/urdf/[object]/[object].urdf \
 --hand_model [hand_model] \
 --play_dataset
 ```
@@ -88,39 +88,39 @@ python skillmimic/run.py --test --task SkillMimicBallPlay \
 
 **Example (Visualizing Box Grasp with MANO):**
 ```bash
-DRI_PRIME=1 python skillmimic/run.py --test --task SkillMimicBallPlay \
---num_envs 1 --cfg_env skillmimic/data/cfg/skillmimic.yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic.yaml \
---motion_file skillmimic/data/motions/dexgrasp_train_mano/box/grasp \
---object_asset skillmimic/data/assets/urdf/Box/Box.urdf --hand_model mano \
+DRI_PRIME=1 python hot/run.py --test --task SkillMimicBallPlay \
+--num_envs 1 --cfg_env hot/data/cfg/skillmimic.yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic.yaml \
+--motion_file hot/data/motions/dexgrasp_train_mano/box/grasp \
+--object_asset hot/data/assets/urdf/Box/Box.urdf --hand_model mano \
 --play_dataset
 ```
-*Output Location:* `skillmimic/data/motions/dexgrasp_train_mano/[object]`
+*Output Location:* `hot/data/motions/dexgrasp_train_mano/[object]`
 
 ### 3. Compute Key Body Positions (Post-Processing)
 The raw data generated above does not include key body position information. You must run the data through the Isaac Gym simulation to obtain this.
 
 **Command Template:**
 ```bash
-python skillmimic/utils/unihot_data_generation/read_pt.py --path [data_path] --hand [hand_name]
+python hot/utils/hop_data_generation/read_pt.py --path [data_path] --hand [hand_name]
 ```
 
 **Example (Processing Box Data for MANO):**
 ```bash
-python skillmimic/utils/unihot_data_generation/read_pt.py --path skillmimic/data/motions/dexgrasp_train_mano/box/grasp --hand mano
+python hot/utils/hop_data_generation/read_pt.py --path hot/data/motions/dexgrasp_train_mano/box/grasp --hand mano
 ```
-*Output Location:* `skillmimic/data/motions/dexgrasp_train_mano/[object]/[skill]_kp`
+*Output Location:* `hot/data/motions/dexgrasp_train_mano/[object]/[skill]_kp`
 
 ### 4. Data Visualization (Processed)
 To verify the data *with* key body positions, use the `--show_keypos` flag.
 
 **Example:**
 ```bash
-CUDA_VISIBLE_DEVICES=1 DRI_PRIME=1 python skillmimic/run.py --test --task SkillMimicBallPlay \
---num_envs 1 --cfg_env skillmimic/data/cfg/skillmimic.yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic.yaml \
---motion_file skillmimic/data/motions/dexgrasp_train_mano/box/grasp_kp \
---object_asset skillmimic/data/assets/urdf/Box/Box.urdf --hand_model mano \
+CUDA_VISIBLE_DEVICES=1 DRI_PRIME=1 python hot/run.py --test --task SkillMimicBallPlay \
+--num_envs 1 --cfg_env hot/data/cfg/skillmimic.yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic.yaml \
+--motion_file hot/data/motions/dexgrasp_train_mano/box/grasp_kp \
+--object_asset hot/data/assets/urdf/Box/Box.urdf --hand_model mano \
 --play_dataset --show_keypos
 ```
 
@@ -174,6 +174,6 @@ Save the validated static grasp poses to the SkillMimic directory format.
 
 ```bash
 cd skillmimic
-python skillmimic/data_dexgrasp_mano.py
+python hot/data_dexgrasp_mano.py
 ```
-*Output:* `skillmimic/data/motions/graspmimic/dexgrasp_mano` (These are used in `unihot_data_generator.py` for further processing).
+*Output:* `hot/data/motions/graspmimic/dexgrasp_mano` (These are used in `hop_data_generator.py` for further processing).

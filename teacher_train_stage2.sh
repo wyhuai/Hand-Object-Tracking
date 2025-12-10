@@ -40,13 +40,13 @@ for i in "${!GPUS[@]}"; do
     echo "=== 在 GPU $gpu 上运行对象: $obj ($obj_lower) ==="
     
     # 构建完整的命令 - 使用 -u 参数禁用输出缓冲
-    CMD="CUDA_VISIBLE_DEVICES=$gpu CUDA_LAUNCH_BLOCKING=1 python -u skillmimic/run.py \
+    CMD="CUDA_VISIBLE_DEVICES=$gpu CUDA_LAUNCH_BLOCKING=1 python -u hot/run.py \
         --task SkillMimicHandRand \
         --num_envs 4096 \
         --episode_length 60 \
-        --cfg_env skillmimic/data/cfg/mano/mano_stage2_noisey_generalize.yaml \
-        --cfg_train skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml \
-        --motion_file \"skillmimic/data/motions/dexgrasp_train_mano_gmp/$obj_lower\" \
+        --cfg_env hot/data/cfg/mano/mano_stage2_noisey_generalize.yaml \
+        --cfg_train hot/data/cfg/train/rlg/skillmimic_denseobj.yaml \
+        --motion_file \"hot/data/motions/dexgrasp_train_mano_gmp/$obj_lower\" \
         --state_noise_prob 0.5 \
         --obj_rand_scale \
         --enable_obj_keypoints \

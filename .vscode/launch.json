@@ -8,7 +8,7 @@
             "name": "Run SkillMimic Test",
             "type": "python",
             "request": "launch",
-            "program": "skillmimic/run.py",
+            "program": "hot/run.py",
             "console": "integratedTerminal",
             "justMyCode": false,
             "env": {
@@ -19,9 +19,9 @@
                 "--test",
                 "--task", "SkillMimicHandRand",
                 "--num_envs", "1024",
-                "--cfg_env", "skillmimic/data/cfg/mano/mano_stage1_precise_track.yaml",
-                "--cfg_train", "skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml",
-                "--motion_file", "skillmimic/data/motions/dexgrasp_train_mano/bottle/grasp_higher_kp",
+                "--cfg_env", "hot/data/cfg/mano/mano_stage1_precise_track.yaml",
+                "--cfg_train", "hot/data/cfg/train/rlg/skillmimic_denseobj.yaml",
+                "--motion_file", "hot/data/motions/dexgrasp_train_mano/bottle/grasp_higher_kp",
                 "--state_init", "2",
                 "--episode_length", "180",
                 "--enable_obj_keypoints",
@@ -38,42 +38,42 @@
             "name": "PlayDataset Hand",
             "type": "python",
             "request": "launch",
-            "program": "skillmimic/run.py",
+            "program": "hot/run.py",
             "console": "integratedTerminal",
             "justMyCode": false,
             "cwd": "/home/lenovo/runyi/AILab/SkillMimic-Hand",
-            "python": "/home/lenovo/miniconda3/envs/skillmimic/bin/python",
+            "python": "/home/lenovo/miniconda3/envs/hot/bin/python",
             "args": [
                 "--test", "--num_envs", "1",
                 "--task", "SkillMimicHandRand",
-                "--cfg_env", "skillmimic/data/cfg/skillmimic_wrist.yaml",
-                "--cfg_train", "skillmimic/data/cfg/train/rlg/skillmimic.yaml",
-                "--motion_file", "skillmimic/data/motions/dexgrasp_train_mano/hammer/grasp_higher_kp/001_hammer_2_16-8.pt",
+                "--cfg_env", "hot/data/cfg/skillmimic_wrist.yaml",
+                "--cfg_train", "hot/data/cfg/train/rlg/skillmimic.yaml",
+                "--motion_file", "hot/data/motions/dexgrasp_train_mano/hammer/grasp_higher_kp/001_hammer_2_16-8.pt",
                 "--objnames", "Hammer",
                 "--play_dataset",
                 // "--save_image",
             ],
             "env": {
                 "CUDA_LAUNCH_BLOCKING": "1",
-                "LD_LIBRARY_PATH": "/home/lenovo/miniconda3/envs/skillmimic/lib:${env:LD_LIBRARY_PATH}"
+                "LD_LIBRARY_PATH": "/home/lenovo/miniconda3/envs/hot/lib:${env:LD_LIBRARY_PATH}"
             },
         },
         {
             "name": "Mano Test",
             "type": "python",
             "request": "launch",
-            "program": "skillmimic/run.py",
+            "program": "hot/run.py",
             "console": "integratedTerminal",
             "justMyCode": false,
             "cwd": "/home/lenovo/runyi/AILab/SkillMimic-Hand",
-            "python": "/home/lenovo/miniconda3/envs/skillmimic/bin/python",
+            "python": "/home/lenovo/miniconda3/envs/hot/bin/python",
             "args": [
                 "--test",
                 "--task", "SkillMimicHandRand",
                 "--num_envs", "1",
-                "--cfg_env", "skillmimic/data/cfg/mano_stage1_precise_track.yaml",
-                "--cfg_train", "skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml", //skillmimic_denseobj distill
-                "--motion_file", "skillmimic/data/motions/dexgrasp_train_mano/box/grasp_higher_kp", // 001_bowl_0_6* 001_bowl_0_4*
+                "--cfg_env", "hot/data/cfg/mano_stage1_precise_track.yaml",
+                "--cfg_train", "hot/data/cfg/train/rlg/skillmimic_denseobj.yaml", //skillmimic_denseobj distill
+                "--motion_file", "hot/data/motions/dexgrasp_train_mano/box/grasp_higher_kp", // 001_bowl_0_6* 001_bowl_0_4*
                 "--state_init", "2",
                 "--episode_length", "180",
                 "--enable_obj_keypoints",
@@ -90,25 +90,25 @@
             ],
             "env": {
                 "CUDA_LAUNCH_BLOCKING": "1",
-                "LD_LIBRARY_PATH": "/home/lenovo/miniconda3/envs/skillmimic/lib:${env:LD_LIBRARY_PATH}"
+                "LD_LIBRARY_PATH": "/home/lenovo/miniconda3/envs/hot/lib:${env:LD_LIBRARY_PATH}"
             },
         },
         {
             "name": "ShadowHand Test",
             "type": "python",
             "request": "launch",
-            "program": "skillmimic/run.py",
+            "program": "hot/run.py",
             "console": "integratedTerminal",
             "justMyCode": false,
             "cwd": "/home/lenovo/runyi/AILab/Skillmimic_Hand",
-            "python": "/home/lenovo/miniconda3/envs/skillmimic/bin/python",
+            "python": "/home/lenovo/miniconda3/envs/hot/bin/python",
             "args": [
                 "--test",
                 "--task", "SkillMimicHandRand",
                 "--num_envs", "1",
-                "--cfg_env", "skillmimic/data/cfg/shadow/shadow_stage1_precise_track.yaml",
-                "--cfg_train", "skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml",
-                "--motion_file", "skillmimic/data/motions/dexgrasp_train_shadow/bottle/grasp_higher_kp", // 002_bottle_12_1.pt
+                "--cfg_env", "hot/data/cfg/shadow/shadow_stage1_precise_track.yaml",
+                "--cfg_train", "hot/data/cfg/train/rlg/skillmimic_denseobj.yaml",
+                "--motion_file", "hot/data/motions/dexgrasp_train_shadow/bottle/grasp_higher_kp", // 002_bottle_12_1.pt
                 "--hand_model", "shadow",
                 "--state_init", "2",
                 "--episode_length", "180",
@@ -128,25 +128,25 @@
             ],
             "env": {
                 "CUDA_LAUNCH_BLOCKING": "1",
-                "LD_LIBRARY_PATH": "/home/lenovo/miniconda3/envs/skillmimic/lib:${env:LD_LIBRARY_PATH}"
+                "LD_LIBRARY_PATH": "/home/lenovo/miniconda3/envs/hot/lib:${env:LD_LIBRARY_PATH}"
             },
         },
         {
             "name": "Allegro Test",
             "type": "python",
             "request": "launch",
-            "program": "skillmimic/run.py",
+            "program": "hot/run.py",
             "console": "integratedTerminal",
             "justMyCode": false,
             "cwd": "/home/lenovo/runyi/AILab/Skillmimic_Hand",
-            "python": "/home/lenovo/miniconda3/envs/skillmimic/bin/python",
+            "python": "/home/lenovo/miniconda3/envs/hot/bin/python",
             "args": [
                 "--test",
                 "--task", "SkillMimicHandRand",
                 "--num_envs", "1",
-                "--cfg_env", "skillmimic/data/cfg/allegro/allegro_stage1_precise_track.yaml",
-                "--cfg_train", "skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml",
-                "--motion_file", "skillmimic/data/motions/dexgrasp_train_allegro/bottle/grasp_higher_kp", // 002_bottle_12_1.pt
+                "--cfg_env", "hot/data/cfg/allegro/allegro_stage1_precise_track.yaml",
+                "--cfg_train", "hot/data/cfg/train/rlg/skillmimic_denseobj.yaml",
+                "--motion_file", "hot/data/motions/dexgrasp_train_allegro/bottle/grasp_higher_kp", // 002_bottle_12_1.pt
                 "--hand_model", "allegro",
                 "--state_init", "2",
                 "--episode_length", "180",
@@ -164,7 +164,7 @@
             ],
             "env": {
                 "CUDA_LAUNCH_BLOCKING": "1",
-                "LD_LIBRARY_PATH": "/home/lenovo/miniconda3/envs/skillmimic/lib:${env:LD_LIBRARY_PATH}"
+                "LD_LIBRARY_PATH": "/home/lenovo/miniconda3/envs/hot/lib:${env:LD_LIBRARY_PATH}"
             },
             
         },

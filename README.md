@@ -12,8 +12,8 @@ Create the conda environment and install dependencies.
 
 ```Bash
 # Option 1: Create manually
-conda create -n skillmimic python=3.8
-conda activate skillmimic
+conda create -n hot python=3.8
+conda activate hot
 pip install -r requirements.txt
 
 # Option 2: Create from yaml
@@ -56,7 +56,7 @@ Alternatively, you can generate the dataset from scratch (or extend it to new ob
 After downloading, extract the data and ensure the directory structure looks like this:
 
 ```text
-skillmimic/data/motions/
+hot/data/motions/
 ├── dexgrasp_train_mano/
 │   ├── bottle/
 │   ├── box/
@@ -89,12 +89,12 @@ bash teacher_train_stage1.sh
 **Full Command:**
 
 ```Bash
-CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task SkillMimicHandRand \
+CUDA_LAUNCH_BLOCKING=1 python hot/run.py --task SkillMimicHandRand \
 --num_envs 4096 \
 --episode_length 60 \
---cfg_env skillmimic/data/cfg/mano/mano_stage1_precise_track.yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml \
---motion_file skillmimic/data/motions/dexgrasp_train_mano_gmp/bottle\
+--cfg_env hot/data/cfg/mano/mano_stage1_precise_track.yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic_denseobj.yaml \
+--motion_file hot/data/motions/dexgrasp_train_mano_gmp/bottle\
 --state_noise_prob 0.2 \
 --enable_obj_keypoints \
 --enable_ig_scale \
@@ -119,12 +119,12 @@ bash teacher_train_stage2.sh
 **Full Command:**
 
 ```Bash
-CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task SkillMimicHandRand \
+CUDA_LAUNCH_BLOCKING=1 python hot/run.py --task SkillMimicHandRand \
 --num_envs 4096 \
 --episode_length 60 \
---cfg_env skillmimic/data/cfg/mano/mano_stage2_noisey_generalize.yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml \
---motion_file skillmimic/data/motions/dexgrasp_train_mano_gmp/bottle \
+--cfg_env hot/data/cfg/mano/mano_stage2_noisey_generalize.yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic_denseobj.yaml \
+--motion_file hot/data/motions/dexgrasp_train_mano_gmp/bottle \
 --state_noise_prob 0.5 \
 --obj_rand_scale \
 --enable_obj_keypoints \
@@ -140,11 +140,11 @@ CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task SkillMimicHandRand \
 ### Inference Command:
 Test the trained model.
 ```Bash
-CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --test --task SkillMimicHandRand \
+CUDA_LAUNCH_BLOCKING=1 python hot/run.py --test --task SkillMimicHandRand \
 --num_envs 1 \
---cfg_env skillmimic/data/cfg/mano/mano_stage1_precise_track.yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml \
---motion_file skillmimic/data/motions/dexgrasp_train_mano/bottle/grasp_higher_kp \
+--cfg_env hot/data/cfg/mano/mano_stage1_precise_track.yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic_denseobj.yaml \
+--motion_file hot/data/motions/dexgrasp_train_mano/bottle/grasp_higher_kp \
 --state_init 2 \
 --episode_length 180 \ 
 --enable_obj_keypoints \
@@ -168,12 +168,12 @@ Please note that different skills require specific `--episode_length` settings d
 ### Training
 
 ```Bash
-CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task SkillMimicHandRand \
+CUDA_LAUNCH_BLOCKING=1 python hot/run.py --task SkillMimicHandRand \
 --num_envs 4096 \
 --episode_length 60 \
---cfg_env skillmimic/data/cfg/shadow/shadow_stage1_precise_track.yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml \
---motion_file skillmimic/data/motions/dexgrasp_train_shadow/bottle/grasp_higher_kp \
+--cfg_env hot/data/cfg/shadow/shadow_stage1_precise_track.yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic_denseobj.yaml \
+--motion_file hot/data/motions/dexgrasp_train_shadow/bottle/grasp_higher_kp \
 --state_noise_prob 0.2 \
 --enable_obj_keypoints \
 --enable_ig_scale \
@@ -188,13 +188,13 @@ CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task SkillMimicHandRand \
 ### Inference
 
 ```Bash
-CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task SkillMimicHandRand \
+CUDA_LAUNCH_BLOCKING=1 python hot/run.py --task SkillMimicHandRand \
 --test \
 --num_envs 1 \
 --episode_length 180 \
---cfg_env skillmimic/data/cfg/shadow/shadow_stage1_precise_track.yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml \
---motion_file skillmimic/data/motions/dexgrasp_train_shadow/bottle/grasp_higher_kp \
+--cfg_env hot/data/cfg/shadow/shadow_stage1_precise_track.yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic_denseobj.yaml \
+--motion_file hot/data/motions/dexgrasp_train_shadow/bottle/grasp_higher_kp \
 --state_init 2 \
 --enable_obj_keypoints \
 --enable_ig_scale \
@@ -212,12 +212,12 @@ CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task SkillMimicHandRand \
 ### Training
 
 ```Bash
-CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task SkillMimicHandRand \
+CUDA_LAUNCH_BLOCKING=1 python hot/run.py --task SkillMimicHandRand \
 --num_envs 4096 \
 --episode_length 60 \
---cfg_env skillmimic/data/cfg/allegro/allegro_stage1_precise_track.yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml \
---motion_file skillmimic/data/motions/dexgrasp_train_allegro/bottle/grasp_higher_kp \
+--cfg_env hot/data/cfg/allegro/allegro_stage1_precise_track.yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic_denseobj.yaml \
+--motion_file hot/data/motions/dexgrasp_train_allegro/bottle/grasp_higher_kp \
 --state_noise_prob 0.2 \
 --enable_obj_keypoints \
 --enable_ig_scale \
@@ -232,13 +232,13 @@ CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task SkillMimicHandRand \
 ### Inference
 
 ```Bash
-CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task SkillMimicHandRand \
+CUDA_LAUNCH_BLOCKING=1 python hot/run.py --task SkillMimicHandRand \
 --test \
 --num_envs 1 \
 --episode_length 180 \
---cfg_env skillmimic/data/cfg/allegro/allegro_stage1_precise_track.yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic_denseobj.yaml \
---motion_file skillmimic/data/motions/dexgrasp_train_allegro/bottle/grasp_higher_kp \
+--cfg_env hot/data/cfg/allegro/allegro_stage1_precise_track.yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic_denseobj.yaml \
+--motion_file hot/data/motions/dexgrasp_train_allegro/bottle/grasp_higher_kp \
 --state_init 2 \
 --enable_obj_keypoints \
 --enable_ig_scale \
@@ -257,7 +257,7 @@ Here is the updated documentation with the requested information about **Data Re
 
 This section covers the policy distillation process, designed to train a unified student policy capable of handling **multiple skills** or **multiple objects** simultaneously.
 
-> **⚠️ Important:** Before running the command, please modify `skillmimic/data/cfg/skillmimic_multiobjs_distill.yaml` & `skillmimic/data/cfg/skillmimic_distill.yaml` to specify:
+> **⚠️ Important:** Before running the command, please modify `hot/data/cfg/skillmimic_multiobjs_distill.yaml` & `hot/data/cfg/skillmimic_distill.yaml` to specify:
 > *   **`obj_names`**: The list of objects you want to distill (e.g., `['Bottle', 'Box', ...]`).
 > *   **`teacher_ckpt`**: The file paths to the pre-trained teacher checkpoints for each corresponding object.
 
@@ -272,13 +272,13 @@ Distill diverse skills (e.g., grasp, move, place) into a single policy.
 
 **Command:**
 ```bash
-DRI_PRIME=1 CUDA_VISIBLE_DEVICES=1  CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task Distill \
+DRI_PRIME=1 CUDA_VISIBLE_DEVICES=1  CUDA_LAUNCH_BLOCKING=1 python hot/run.py --task Distill \
 --num_envs 1024 \
 --episode_length 60 \
---cfg_env skillmimic/data/cfg/skillmimic_distill.yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic_distill.yaml \
---motion_file skillmimic/data/motions/dexgrasp_train_mano_gmp/bottle \
---refined_motion_file skillmimic/data/motions/dexgrasp_train_mano_gmp/bottle \
+--cfg_env hot/data/cfg/skillmimic_distill.yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic_distill.yaml \
+--motion_file hot/data/motions/dexgrasp_train_mano_gmp/bottle \
+--refined_motion_file hot/data/motions/dexgrasp_train_mano_gmp/bottle \
 --state_noise_prob 0.3 \
 --enable_obj_keypoints \
 --enable_ig_scale \
@@ -294,13 +294,13 @@ Distill interaction skills across different objects (e.g., Bottle, Box, Hammer) 
 
 **Command:**
 ```bash
-DRI_PRIME=1 CUDA_VISIBLE_DEVICES=0  CUDA_LAUNCH_BLOCKING=1 python skillmimic/run.py --task MultiObjDistill \
+DRI_PRIME=1 CUDA_VISIBLE_DEVICES=0  CUDA_LAUNCH_BLOCKING=1 python hot/run.py --task MultiObjDistill \
 --num_envs 8192 \
 --episode_length 60 \
---cfg_env skillmimic/data/cfg/skillmimic_multiobjs_distill.yaml \
---cfg_train skillmimic/data/cfg/train/rlg/skillmimic_distill.yaml \
---motion_file skillmimic/data/motions/dexgrasp_train_mano_20obj \
---refined_motion_file skillmimic/data/motions/dexgrasp_train_mano_20obj \
+--cfg_env hot/data/cfg/skillmimic_multiobjs_distill.yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic_distill.yaml \
+--motion_file hot/data/motions/dexgrasp_train_mano_20obj \
+--refined_motion_file hot/data/motions/dexgrasp_train_mano_20obj \
 --state_noise_prob 0.3 \
 --enable_obj_keypoints \
 --enable_ig_scale \

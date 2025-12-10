@@ -1,4 +1,4 @@
 *largemlp*.pth
 checkpoint/5objs_debug
 output
-skillmimic/data/motions/multiobj_distill
+hot/data/motions/multiobj_distill
