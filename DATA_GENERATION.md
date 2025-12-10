@@ -169,8 +169,8 @@ python validate_grasps.py \
 ```
 *Output:* `saved_ids.txt` (contains indices for filtered grasps).
 
-### 4. Export to HOt
-Save the validated static grasp poses to the HOT directory format.
+### 4. Export to Hot
+Save the validated static grasp poses to the Hot directory format.
 
 ```bash
 cd hot
