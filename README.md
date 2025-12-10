@@ -104,7 +104,7 @@ CUDA_LAUNCH_BLOCKING=1 python hot/run.py --task SkillMimicHandRand \
 --episode_length 60 \
 --cfg_env hot/data/cfg/mano/mano_stage1_precise_track.yaml \
 --cfg_train hot/data/cfg/train/rlg/skillmimic_denseobj.yaml \
---motion_file hot/data/motions/dexgrasp_train_mano_gmp/bottle\
+--motion_file hot/data/motions/dexgrasp_train_mano_gmp/bottle \
 --state_noise_prob 0.2 \
 --enable_obj_keypoints \
 --enable_ig_scale \
