@@ -1,8 +1,8 @@
-# SkillMimic-Hand
+# Hand-Object Tracking (HOT)
 
 [**Paper**](INSERT_PAPER_URL_HERE) | [**Project Page**](https://anonymous6241.github.io/) | [**Video**](INSERT_VIDEO_URL_HERE)
 
-Code release for the **Dexterous Hand** branch of "SkillMimic". This branch focuses on learning dexterous manipulation skills using various hand models (MANO, Shadow Hand, Allegro Hand).
+Code release for the paper "...".
 
 ## Installation 💽
 
