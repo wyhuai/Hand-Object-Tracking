@@ -15,6 +15,7 @@ If you have already set up the main `hot` environment, you only need to install 
 pip install matplotlib
 pip install ikpy
 pip install pytorch-kinematics==0.7.0
+pip install arm_pytorch_utilities
 pip install viser
 ```
 
@@ -67,32 +68,20 @@ cd hot/utils/hop_data_generation
 ### 2. Data Visualization (Raw)
 Visualize the generated data *before* key body positions are calculated.
 
-**Command Template:**
+Use the inference code with the --play_dataset flag to directly play the raw motion sequences from the dataset.
+**Command Example:**
 ```bash
-python hot/run.py --test --task SkillMimicBallPlay \
---num_envs 1 --cfg_env hot/data/cfg/[yaml].yaml \
---cfg_train hot/data/cfg/train/rlg/skillmimic.yaml \
---motion_file [motion_path] \
---object_asset hot/data/assets/urdf/[object]/[object].urdf \
---hand_model [hand_model] \
---play_dataset
-```
-
-**Arguments Reference:**
-*   **[object]**: `Bottle`, `Ball`, `Sword`, `Box`, `Hammer`, `Shoe`, `USB`, `Book`, `Bowl`, `Mug`, `Pencil`, `Pliers`, `Screwdriver`, `Stick`, `Wineglass`, `Gun`, `Pan`
-*   **[yaml]**:
-    *   MANO: `skillmimic`
-    *   Allegro: `skillmimic_allegro`
-    *   Shadow: `skillmimic_shadow`
-*   **[hand_model]**: `mano`, `allegro`, `shadow`
-
-**Example (Visualizing Box Grasp with MANO):**
-```bash
-DRI_PRIME=1 python hot/run.py --test --task SkillMimicBallPlay \
---num_envs 1 --cfg_env hot/data/cfg/skillmimic.yaml \
---cfg_train hot/data/cfg/train/rlg/skillmimic.yaml \
---motion_file hot/data/motions/dexgrasp_train_mano/box/grasp \
---object_asset hot/data/assets/urdf/Box/Box.urdf --hand_model mano \
+python hot/run.py --test --task SkillMimicHandRand \
+--num_envs 1 \
+--cfg_env hot/data/cfg/mano/mano_stage1_precise_track.yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic_denseobj.yaml \
+--motion_file hot/data/motions/dexgrasp_train_mano/bottle/grasp_higher_kp \
+--state_init 2 \
+--episode_length 180 \
+--enable_obj_keypoints \
+--use_delta_action \
+--enable_dof_obs \
+--objnames Bottle \
 --play_dataset
 ```
 *Output Location:* `hot/data/motions/dexgrasp_train_mano/[object]`
@@ -110,19 +99,6 @@ python hot/utils/hop_data_generation/read_pt.py --path [data_path] --hand [hand_
 python hot/utils/hop_data_generation/read_pt.py --path hot/data/motions/dexgrasp_train_mano/box/grasp --hand mano
 ```
 *Output Location:* `hot/data/motions/dexgrasp_train_mano/[object]/[skill]_kp`
-
-### 4. Data Visualization (Processed)
-To verify the data *with* key body positions, use the `--show_keypos` flag.
-
-**Example:**
-```bash
-CUDA_VISIBLE_DEVICES=1 DRI_PRIME=1 python hot/run.py --test --task SkillMimicBallPlay \
---num_envs 1 --cfg_env hot/data/cfg/skillmimic.yaml \
---cfg_train hot/data/cfg/train/rlg/skillmimic.yaml \
---motion_file hot/data/motions/dexgrasp_train_mano/box/grasp_kp \
---object_asset hot/data/assets/urdf/Box/Box.urdf --hand_model mano \
---play_dataset --show_keypos
-```
 
 ---
 
@@ -144,8 +120,8 @@ python main.py
 
 ### 2. Visualize Grasps
 ```bash
-cd DexGraspNet/grasp_generation/tests
-python DexGraspNet/grasp_generation/tests/visualize_result.py
+cd DexGraspNet/grasp_generation
+python tests/visualize_result.py
 ```
 *Output:* HTML pages in `DexGraspNet/data/experiments/exp_32/results`
 
@@ -154,18 +130,18 @@ Filter valid hand poses for the final set.
 
 **Command:**
 ```bash
-cd DexGraspNet/grasp_generation/scripts
-python validate_grasps.py \
+cd DexGraspNet/grasp_generation/
+python scripts/validate_grasps.py \
 --grasp_path [generated_grasp_location] \
 --object_code [object_code]
 ```
 
 **Example:**
 ```bash
-cd DexGraspNet/grasp_generation/scripts
-python validate_grasps.py \
---grasp_path DexGraspNet/data/experiments_gun_008/exp_32/results \
---object_code sem-Gun-898424eaa40e821c2bf47341dbd96eb
+cd DexGraspNet/grasp_generation/
+python scripts/validate_grasps.py \
+--grasp_path ../data/experiments_hammer_02/exp_32/results \
+--object_code sem-Hammer-5d4da30b8c0eaae46d7014c7d6ce68fc
 ```
 *Output:* `saved_ids.txt` (contains indices for filtered grasps).
 
