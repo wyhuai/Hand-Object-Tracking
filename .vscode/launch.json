@@ -1,0 +1,172 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run SkillMimic Test",
+            "type": "python",
+            "request": "launch",
+            "program": "hot/run.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "CUDA_LAUNCH_BLOCKING": "1",
+                "CUDA_VISIBLE_DEVICES": "1"
+            },
+            "args": [
+                "--test",
+                "--task", "SkillMimicHandRand",
+                "--num_envs", "1024",
+                "--cfg_env", "hot/data/cfg/mano/mano_stage1_precise_track.yaml",
+                "--cfg_train", "hot/data/cfg/train/rlg/skillmimic_denseobj.yaml",
+                "--motion_file", "hot/data/motions/dexgrasp_train_mano/bottle/grasp_higher_kp",
+                "--state_init", "2",
+                "--episode_length", "180",
+                "--enable_obj_keypoints",
+                "--use_delta_action",
+                "--enable_dof_obs",
+                "--objnames", "Bottle",
+                "--checkpoint", "checkpoint/multiobj_teacher_checkpoints/GraspMovePlace_bottle_0.pth",
+                "--save_refined_data",
+                "--headless"
+            ]
+        },
+
+        {
+            "name": "PlayDataset Hand",
+            "type": "python",
+            "request": "launch",
+            "program": "hot/run.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "/home/lenovo/runyi/AILab/SkillMimic-Hand",
+            "python": "/home/lenovo/miniconda3/envs/hot/bin/python",
+            "args": [
+                "--test", "--num_envs", "1",
+                "--task", "SkillMimicHandRand",
+                "--cfg_env", "hot/data/cfg/skillmimic_wrist.yaml",
+                "--cfg_train", "hot/data/cfg/train/rlg/skillmimic.yaml",
+                "--motion_file", "hot/data/motions/dexgrasp_train_mano/hammer/grasp_higher_kp/001_hammer_2_16-8.pt",
+                "--objnames", "Hammer",
+                "--play_dataset",
+                // "--save_image",
+            ],
+            "env": {
+                "CUDA_LAUNCH_BLOCKING": "1",
+                "LD_LIBRARY_PATH": "/home/lenovo/miniconda3/envs/hot/lib:${env:LD_LIBRARY_PATH}"
+            },
+        },
+        {
+            "name": "Mano Test",
+            "type": "python",
+            "request": "launch",
+            "program": "hot/run.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "/home/lenovo/runyi/AILab/SkillMimic-Hand",
+            "python": "/home/lenovo/miniconda3/envs/hot/bin/python",
+            "args": [
+                "--test",
+                "--task", "SkillMimicHandRand",
+                "--num_envs", "1",
+                "--cfg_env", "hot/data/cfg/mano_stage1_precise_track.yaml",
+                "--cfg_train", "hot/data/cfg/train/rlg/skillmimic_denseobj.yaml", //skillmimic_denseobj distill
+                "--motion_file", "hot/data/motions/dexgrasp_train_mano/box/grasp_higher_kp", // 001_bowl_0_6* 001_bowl_0_4*
+                "--state_init", "2",
+                "--episode_length", "180",
+                "--enable_obj_keypoints",
+                "--enable_ig_scale",
+                "--enable_dof_obs",
+                "--use_res_action",
+                "--state_noise_prob", "1.0",
+                // "--obj_rand_scale",
+                "--checkpoint", "checkpoint/multiobj_teacher_checkpoints/GraspMovePlace_box_0.pth",
+                "--objnames", "Box",
+                // "--play_dataset",
+                // "--headless",
+                // "--enable_early_termination"
+            ],
+            "env": {
+                "CUDA_LAUNCH_BLOCKING": "1",
+                "LD_LIBRARY_PATH": "/home/lenovo/miniconda3/envs/hot/lib:${env:LD_LIBRARY_PATH}"
+            },
+        },
+        {
+            "name": "ShadowHand Test",
+            "type": "python",
+            "request": "launch",
+            "program": "hot/run.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "/home/lenovo/runyi/AILab/Skillmimic_Hand",
+            "python": "/home/lenovo/miniconda3/envs/hot/bin/python",
+            "args": [
+                "--test",
+                "--task", "SkillMimicHandRand",
+                "--num_envs", "1",
+                "--cfg_env", "hot/data/cfg/shadow/shadow_stage1_precise_track.yaml",
+                "--cfg_train", "hot/data/cfg/train/rlg/skillmimic_denseobj.yaml",
+                "--motion_file", "hot/data/motions/dexgrasp_train_shadow/bottle/grasp_higher_kp", // 002_bottle_12_1.pt
+                "--hand_model", "shadow",
+                "--state_init", "2",
+                "--episode_length", "180",
+                "--enable_obj_keypoints",
+                "--enable_ig_scale",
+                "--enable_dof_obs",
+                "--use_res_action",
+                "--objnames", "Bottle",
+                "--checkpoint", "checkpoint/shadow/shadow_bottle_grasp-move-place.pth",
+                "--seed", "180",
+                // "--play_dataset",
+                // "--build_blender_motion",
+                // "--blender_motion_length", "180",
+                // "--blender_motion_name", "fig8_shadow_unseen_stanford_ref.pickle",
+                // "--headless",
+                // "--enable_early_termination"
+            ],
+            "env": {
+                "CUDA_LAUNCH_BLOCKING": "1",
+                "LD_LIBRARY_PATH": "/home/lenovo/miniconda3/envs/hot/lib:${env:LD_LIBRARY_PATH}"
+            },
+        },
+        {
+            "name": "Allegro Test",
+            "type": "python",
+            "request": "launch",
+            "program": "hot/run.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "/home/lenovo/runyi/AILab/Skillmimic_Hand",
+            "python": "/home/lenovo/miniconda3/envs/hot/bin/python",
+            "args": [
+                "--test",
+                "--task", "SkillMimicHandRand",
+                "--num_envs", "1",
+                "--cfg_env", "hot/data/cfg/allegro/allegro_stage1_precise_track.yaml",
+                "--cfg_train", "hot/data/cfg/train/rlg/skillmimic_denseobj.yaml",
+                "--motion_file", "hot/data/motions/dexgrasp_train_allegro/bottle/grasp_higher_kp", // 002_bottle_12_1.pt
+                "--hand_model", "allegro",
+                "--state_init", "2",
+                "--episode_length", "180",
+                "--enable_obj_keypoints",
+                "--enable_ig_scale",
+                "--enable_dof_obs",
+                "--objnames", "Bottle",
+                "--checkpoint", "checkpoint/allegro/allegro_bottle_grasp-move-place.pth",
+                // "--play_dataset",
+                // "--build_blender_motion",
+                // "--blender_motion_length", "180",
+                // "--blender_motion_name", "fig8_shadow_unseen_stanford_ref.pickle",
+                // "--headless",
+                // "--enable_early_termination"
+            ],
+            "env": {
+                "CUDA_LAUNCH_BLOCKING": "1",
+                "LD_LIBRARY_PATH": "/home/lenovo/miniconda3/envs/hot/lib:${env:LD_LIBRARY_PATH}"
+            },
+            
+        },
+    ]
+}

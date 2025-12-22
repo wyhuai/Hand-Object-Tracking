@@ -1,0 +1,221 @@
+<mujoco model="MuJoCo Model">
+    <compiler angle="radian" meshdir="./meshes_shadow/" />
+    <size njmax="500" nconmax="100"  />
+    <asset>
+        <mesh name="robot0:forearm" file="forearm_electric.obj"></mesh>
+        <mesh name="robot0:forearm_cvx" file="forearm_electric_cvx.obj"></mesh>
+        <mesh name="robot0:wrist" scale="0.001 0.001 0.001" file="wrist.obj"></mesh>
+        <mesh name="robot0:palm" scale="0.001 0.001 0.001" file="palm.obj"></mesh>
+        <mesh name="robot0:knuckle" scale="0.001 0.001 0.001" file="knuckle.obj"></mesh>
+        <mesh name="robot0:F3" scale="0.001 0.001 0.001" file="F3.obj"></mesh>
+        <mesh name="robot0:F2" scale="0.001 0.001 0.001" file="F2.obj"></mesh>
+        <mesh name="robot0:F1" scale="0.001 0.001 0.001" file="F1.obj"></mesh>
+        <mesh name="robot0:lfmetacarpal" scale="0.001 0.001 0.001" file="lfmetacarpal.obj"></mesh>
+        <mesh name="robot0:TH3_z" scale="0.001 0.001 0.001" file="TH3_z.obj"></mesh>
+        <mesh name="robot0:TH2_z" scale="0.001 0.001 0.001" file="TH2_z.obj"></mesh>
+        <mesh name="robot0:TH1_z" scale="0.001 0.001 0.001" file="TH1_z.obj"></mesh>
+    </asset>
+
+    <default>
+        <joint dclass="wrist" stiffness="250" damping="45"/>
+        <joint dclass="mcp" stiffness="180" damping="25"/>
+        <joint dclass="pip" stiffness="100" damping="18"/>
+        <joint dclass="dip" stiffness="50" damping="12"/>
+        <motor dclass="wrist" gear="150"/>
+        <motor dclass="mcp" gear="100"/>
+        <motor dclass="pip" gear="80"/>
+        <motor dclass="dip" gear="50"/>
+    </default>
+    <worldbody>
+            <body name="allegro_wrist" pos="0 0 0">
+            <body name="allegro_root1" pos="0 0 0">
+            <inertial pos="0 0 0" quat="0.707107 0 0 0.707107" mass="0.001" diaginertia="0.00333333 0.00333333 0.00333333" />
+            <joint name="x_joint" pos="0 0 0" axis="1 0 0" type="slide" limited="true"  range="-2 2" dclass="wrist" frictionloss="0.0001" />
+            <body name="allegro_root2" pos="0 0 0">
+                <inertial pos="0 0 0" quat="0.707107 0 0 0.707107" mass="0.001" diaginertia="0.00333333 0.00333333 0.00333333" />
+                <joint name="y_joint" pos="0 0 0" axis="0 1 0" type="slide" limited="true" range="-2 2" dclass="wrist" frictionloss="0.0001" />
+                <body name="allegro_root3" pos="0 0 0">
+                    <inertial pos="0 0 0" quat="0.707107 0 0 0.707107" mass="0.001" diaginertia="0.00333333 0.00333333 0.00333333" />
+                    <joint name="z_joint" pos="0 0 0" axis="0 0 1" type="slide" limited="true" range="-2 2"  dclass="wrist" frictionloss="0.0001" />
+                    <body name="allegro_root4" pos="0 0 0">
+                        <inertial pos="0 0 0" quat="0.707107 0 0 0.707107" mass="0.001" diaginertia="0.00333333 0.00333333 0.00333333" />
+                        <joint name="x_rotation_joint" pos="0 0 0" axis="1 0 0" limited="true" range="-6.28 6.28" dclass="wrist" frictionloss="0.0001" />
+                        <body name="allegro_root5" pos="0 0 0">
+                            <inertial pos="0 0 0" quat="0.707107 0 0 0.707107" mass="0.001" diaginertia="0.00333333 0.00333333 0.00333333" />
+                            <joint name="y_rotation_joint" pos="0 0 0" axis="0 1 0" limited="true" range="-6.28 6.28" dclass="wrist" frictionloss="0.0001" />
+                    <body name="robot0:palm">
+                        <inertial pos="0.006 0 0.036" quat="0.715833 0.0439898 0.0749825 0.692839" mass="0.3" diaginertia="0.001 0.001 0.001" />
+                        <joint name="z_rotation_joint" pos="0 0 0" axis="0 0 1" limited="true" range="-6.28 6.28" dclass="wrist" frictionloss="0.0001" />
+                        <geom class="robot0:D_Vizual" name="robot0:V_palm" size="0.001 0.001 0.001" mesh="robot0:palm"></geom>
+                        <geom name="robot0:C_palm0" class="robot0:DC_Hand" size="0.032 0.0111 0.049" pos="0.011 0 0.038" type="box" rgba="0.4 0.5 0.6 0.1" />
+                        <geom name="robot0:C_palm1" class="robot0:DC_Hand" size="0.011 0.0111 0.025" pos="-0.032 0 0.014" type="box" rgba="0.4 0.5 0.6 0.1" />
+                        <body name="robot0:ffknuckle" pos="0.033 0 0.095">
+                            <inertial pos="0 0 0" quat="0.520062 0.854102 0.00600072 -0.00300036" mass="0.008" diaginertia="1e-05 1e-05 1e-05" />
+                            <joint name="robot0:FFJ3" pos="0 0 0" axis="0 1 0" limited="true" range="-0.349 0.349" dclass="mcp" frictionloss="0.0001" user="1103" />
+                            <body name="robot0:ffproximal" pos="0 0 0">
+                                <inertial pos="0 0 0.023" quat="0.707095 -0.00400054 0.00400054 0.707095" mass="0.014" diaginertia="1e-05 1e-05 1e-05" />
+                                <joint name="robot0:FFJ2" pos="0 0 0" axis="1 0 0" limited="true" range="0 1.571" dclass="pip" frictionloss="0.0001" user="1102" />
+                                <geom class="robot0:D_Vizual" name="robot0:V_ffproximal" size="0.001 0.001 0.001" mesh="robot0:F3"></geom>
+                                <geom name="robot0:C_ffproximal" class="robot0:DC_Hand" size="0.01 0.0225" pos="0 0 0.0225" type="capsule" />
+                                <body name="robot0:ffmiddle" pos="0 0 0.045">
+                                    <inertial pos="0 0 0.011" quat="0.707107 0 0 0.707107" mass="0.012" diaginertia="1e-05 1e-05 1e-05" />
+                                    <joint name="robot0:FFJ1" pos="0 0 0" axis="1 0 0" limited="true" range="0 1.571" dclass="dip" frictionloss="0.0001" user="1101" />
+                                    <geom class="robot0:D_Vizual" name="robot0:V_ffmiddle" size="0.001 0.001 0.001" mesh="robot0:F2"></geom>
+                                    <geom name="robot0:C_ffmiddle" class="robot0:DC_Hand" size="0.00805 0.0125" pos="0 0 0.0125" type="capsule" />
+                                    <body name="robot0:ffdistal" pos="0 0 0.025">
+                                        <inertial pos="0 0 0.015" quat="0.7071 -0.00300043 0.00300043 0.7071" mass="0.01" diaginertia="1e-05 1e-05 1e-05" />
+                                        <joint name="robot0:FFJ0" pos="0 0 0" axis="1 0 0" limited="true" range="0 1.571" dclass="dip" frictionloss="0.0001" user="1100" />
+                                        <geom class="robot0:D_Vizual" name="robot0:V_ffdistal" pos="0 0 0.001" size="0.001 0.001 0.001" mesh="robot0:F1"></geom>
+                                        <geom name="robot0:C_ffdistal" class="robot0:DC_Hand" size="0.00705 0.012" pos="0 0 0.012" type="capsule" condim="4" />
+                                        <site name="robot0:S_fftip" pos="0 0 0.026" group="3" />
+                                        <site name="robot0:Tch_fftip" class="robot0:D_Touch" pos="0 -0.004 0.018" />
+                                    </body>
+                                </body>
+                            </body>
+                        </body>
+                        <body name="robot0:mfknuckle" pos="0.011 0 0.099">
+                            <inertial pos="0 0 0" quat="0.520062 0.854102 0.00600072 -0.00300036" mass="0.008" diaginertia="1e-05 1e-05 1e-05" />
+                            <joint name="robot0:MFJ3" pos="0 0 0" axis="0 1 0" limited="true" range="-0.349 0.349" dclass="mcp" frictionloss="0.0001" user="1107" />
+                            <body name="robot0:mfproximal" pos="0 0 0">
+                                <inertial pos="0 0 0.023" quat="0.707095 -0.00400054 0.00400054 0.707095" mass="0.014" diaginertia="1e-05 1e-05 1e-05" />
+                                <joint name="robot0:MFJ2" pos="0 0 0" axis="1 0 0" limited="true" range="0 1.571" dclass="pip" frictionloss="0.0001" user="1106" />
+                                <geom class="robot0:D_Vizual" name="robot0:V_mfproximal" size="0.001 0.001 0.001" mesh="robot0:F3"></geom>
+                                <geom name="robot0:C_mfproximal" class="robot0:DC_Hand" size="0.01 0.0225" pos="0 0 0.0225" type="capsule" />
+                                <body name="robot0:mfmiddle" pos="0 0 0.045">
+                                    <inertial pos="0 0 0.012" quat="0.707107 0 0 0.707107" mass="0.012" diaginertia="1e-05 1e-05 1e-05" />
+                                    <joint name="robot0:MFJ1" pos="0 0 0" axis="1 0 0" limited="true" range="0 1.571" dclass="dip" frictionloss="0.0001" user="1105" />
+                                    <geom class="robot0:D_Vizual" name="robot0:V_mfmiddle" size="0.001 0.001 0.001" mesh="robot0:F2"></geom>
+                                    <geom name="robot0:C_mfmiddle" class="robot0:DC_Hand" size="0.00805 0.0125" pos="0 0 0.0125" type="capsule" />
+                                    <body name="robot0:mfdistal" pos="0 0 0.025">
+                                        <inertial pos="0 0 0.015" quat="0.7071 -0.00300043 0.00300043 0.7071" mass="0.01" diaginertia="1e-05 1e-05 1e-05" />
+                                        <joint name="robot0:MFJ0" pos="0 0 0" axis="1 0 0" limited="true" range="0 1.571" dclass="dip" frictionloss="0.0001" user="1104" />
+                                        <geom class="robot0:D_Vizual" name="robot0:V_mfdistal" size="0.001 0.001 0.001" mesh="robot0:F1"></geom>                                        
+                                        <geom name="robot0:C_mfdistal" class="robot0:DC_Hand" size="0.00705 0.012" pos="0 0 0.012" type="capsule" condim="4" />
+                                        <site name="robot0:S_mftip" pos="0 0 0.026" group="3" />
+                                        <site name="robot0:Tch_mftip" class="robot0:D_Touch" pos="0 -0.004 0.018" />
+                                    </body>
+                                </body>
+                            </body>
+                        </body>
+                        <body name="robot0:rfknuckle" pos="-0.011 0 0.095">
+                            <inertial pos="0 0 0" quat="0.520062 0.854102 0.00600072 -0.00300036" mass="0.008" diaginertia="1e-05 1e-05 1e-05" />
+                            <joint name="robot0:RFJ3" pos="0 0 0" axis="0 1 0" limited="true" range="-0.349 0.349" dclass="mcp" frictionloss="0.0001" user="1111" />
+                            <body name="robot0:rfproximal" pos="0 0 0">
+                                <inertial pos="0 0 0.023" quat="0.707095 -0.00400054 0.00400054 0.707095" mass="0.014" diaginertia="1e-05 1e-05 1e-05" />
+                                <joint name="robot0:RFJ2" pos="0 0 0" axis="1 0 0" limited="true" range="0 1.571" dclass="pip" frictionloss="0.0001" user="1110" />
+                                <geom class="robot0:D_Vizual" name="robot0:V_rfproximal" size="0.001 0.001 0.001" mesh="robot0:F3"></geom>
+                                <geom name="robot0:C_rfproximal" class="robot0:DC_Hand" size="0.01 0.0225" pos="0 0 0.0225" type="capsule" />
+                                <body name="robot0:rfmiddle" pos="0 0 0.045">
+                                    <inertial pos="0 0 0.012" quat="0.707107 0 0 0.707107" mass="0.012" diaginertia="1e-05 1e-05 1e-05" />
+                                    <joint name="robot0:RFJ1" pos="0 0 0" axis="1 0 0" limited="true" range="0 1.571" dclass="dip" frictionloss="0.0001" user="1109" />
+                                    <geom class="robot0:D_Vizual" name="robot0:V_rfmiddle" size="0.001 0.001 0.001" mesh="robot0:F2"></geom>
+                                    <geom name="robot0:C_rfmiddle" class="robot0:DC_Hand" size="0.00805 0.0125" pos="0 0 0.0125" type="capsule" />
+                                    <body name="robot0:rfdistal" pos="0 0 0.025">
+                                        <inertial pos="0 0 0.015" quat="0.7071 -0.00300043 0.00300043 0.7071" mass="0.01" diaginertia="1e-05 1e-05 1e-05" />
+                                        <joint name="robot0:RFJ0" pos="0 0 0" axis="1 0 0" limited="true" range="0 1.571" dclass="dip" frictionloss="0.0001" user="1108" />
+                                        <geom class="robot0:D_Vizual" name="robot0:V_rfdistal" size="0.001 0.001 0.001" mesh="robot0:F1" pos="0 0 0.001"></geom>
+                                        <geom name="robot0:C_rfdistal" class="robot0:DC_Hand" size="0.00705 0.012" pos="0 0 0.012" type="capsule" condim="4" />
+                                        <site name="robot0:S_rftip" pos="0 0 0.026" group="3" />
+                                        <site name="robot0:Tch_rftip" class="robot0:D_Touch" pos="0 -0.004 0.018" />
+                                    </body>
+                                </body>
+                            </body>
+                        </body>
+                        <body name="robot0:lfmetacarpal" pos="-0.017 0 0.044">
+                            <inertial pos="-0.014 0.001 0.014" quat="0.709167 -0.0920216 -0.0630148 0.696164" mass="0.075" diaginertia="1e-05 1e-05 1e-05" />
+                            <joint name="robot0:LFJ4" pos="0 0 0" axis="0.570977 0 0.820966" limited="true" range="0 0.785" dclass="mcp" frictionloss="0.0001" user="1116" />
+                            <geom class="robot0:D_Vizual" name="robot0:V_lfmetacarpal" pos="-0.016 0 -0.023" size="0.001 0.001 0.001" mesh="robot0:lfmetacarpal"></geom>
+                            <geom name="robot0:C_lfmetacarpal" class="robot0:DC_Hand" size="0.0095 0.0111 0.025" pos="-0.0165 0 0.01" type="box" rgba="0.4 0.5 0.6 0.2" />
+                            <body name="robot0:lfknuckle" pos="-0.017 0 0.044">
+                                <inertial pos="0 0 0" quat="0.520062 0.854102 0.00600072 -0.00300036" mass="0.008" diaginertia="1e-05 1e-05 1e-05" />
+                                <joint name="robot0:LFJ3" pos="0 0 0" axis="0 1 0" limited="true" range="-0.349 0.349" dclass="mcp" frictionloss="0.0001" user="1115" />
+                                <body name="robot0:lfproximal" pos="0 0 0">
+                                    <inertial pos="0 0 0.023" quat="0.707095 -0.00400054 0.00400054 0.707095" mass="0.014" diaginertia="1e-05 1e-05 1e-05" />
+                                    <joint name="robot0:LFJ2" pos="0 0 0" axis="1 0 0" limited="true" range="0 1.571" dclass="pip" frictionloss="0.0001" user="1114" />
+                                    <geom class="robot0:D_Vizual" name="robot0:V_lfproximal" size="0.001 0.001 0.001" mesh="robot0:F3"></geom>
+                                    <geom name="robot0:C_lfproximal" class="robot0:DC_Hand" size="0.01 0.0225" pos="0 0 0.0225" type="capsule" />
+                                    <body name="robot0:lfmiddle" pos="0 0 0.045">
+                                        <inertial pos="0 0 0.012" quat="0.707107 0 0 0.707107" mass="0.012" diaginertia="1e-05 1e-05 1e-05" />
+                                        <joint name="robot0:LFJ1" pos="0 0 0" axis="1 0 0" limited="true" range="0 1.571" dclass="dip" frictionloss="0.0001" user="1113" />
+                                        <geom class="robot0:D_Vizual" name="robot0:V_lfmiddle" size="0.001 0.001 0.001" mesh="robot0:F2"></geom>
+                                        <geom name="robot0:C_lfmiddle" class="robot0:DC_Hand" size="0.00805 0.0125" pos="0 0 0.0125" type="capsule" />
+                                        <body name="robot0:lfdistal" pos="0 0 0.025">
+                                            <inertial pos="0 0 0.015" quat="0.7071 -0.00300043 0.00300043 0.7071" mass="0.01" diaginertia="1e-05 1e-05 1e-05" />
+                                            <joint name="robot0:LFJ0" pos="0 0 0" axis="1 0 0" limited="true" range="0 1.571" dclass="dip" frictionloss="0.0001" user="1112" />
+                                            <geom class="robot0:D_Vizual" name="robot0:V_lfdistal" size="0.001 0.001 0.001" mesh="robot0:F1" pos="0 0 0.001"></geom>
+                                            <geom name="robot0:C_lfdistal" class="robot0:DC_Hand" size="0.00705 0.012" pos="0 0 0.012" type="capsule" condim="4" />
+                                            <site name="robot0:S_lftip" pos="0 0 0.026" group="3" />
+                                            <site name="robot0:Tch_lftip" class="robot0:D_Touch" pos="0 -0.004 0.018" />
+                                        </body>
+                                    </body>
+                                </body>
+                            </body>
+                        </body>
+                        <body name="robot0:thbase" pos="0.034 -0.009 0.029" quat="0.923956 0 0.382499 0">
+                            <inertial pos="0 0 0" mass="0.01" diaginertia="1e-05 1e-05 1e-05" />
+                            <joint name="robot0:THJ4" pos="0 0 0" axis="0 0 -1" limited="true" range="-1.047 1.047" dclass="mcp" frictionloss="0.0001" user="1121" />
+                            <geom name="robot0:V_thbase" size="0.001 0.001 0.001" type="box" group="1" />
+                            <body name="robot0:thproximal" pos="0 0 0">
+                                <inertial pos="0 0 0.017" quat="0.981604 0 0.000999597 0.190923" mass="0.016" diaginertia="1e-05 1e-05 1e-05" />
+                                <joint name="robot0:THJ3" pos="0 0 0" axis="1 0 0" limited="true" range="0 1.222" dclass="mcp" frictionloss="0.0001" user="1120" />
+                                <geom class="robot0:D_Vizual" name="robot0:V_thproximal" size="0.001 0.001 0.001" mesh="robot0:TH3_z"></geom>
+                                <geom name="robot0:C_thproximal" class="robot0:DC_Hand" size="0.013 0.019" pos="0 0 0.019" type="capsule" rgba="0.4 0.5 0.6 0.1" />
+                                <body name="robot0:thhub" pos="0 0 0.038">
+                                    <inertial pos="0 0 0" mass="0.002" diaginertia="1e-05 1e-05 1e-05" />
+                                    <joint name="robot0:THJ2" pos="0 0 0" axis="1 0 0" limited="true" range="-0.209 0.209" dclass="pip" frictionloss="0.0001" user="1119" />
+                                    <geom name="robot0:V_thhub" size="0.001 0.001 0.001" type="box" group="1" />
+                                    <body name="robot0:thmiddle" pos="0 0 0">
+                                        <inertial pos="0 0 0.016" quat="0.999971 -0.000999971 -0.00699979 0.00299991" mass="0.016" diaginertia="1e-05 1e-05 1e-05" />
+                                        <joint name="robot0:THJ1" pos="0 0 0" axis="0 1 0" limited="true" range="-0.524 0.524" dclass="dip" frictionloss="0.0001" user="1118" />
+                                        <geom class="robot0:D_Vizual" name="robot0:V_thmiddle" size="0.001 0.001 0.001" mesh="robot0:TH2_z"></geom>
+                                        <geom name="robot0:C_thmiddle" class="robot0:DC_Hand" size="0.011 0.016" pos="0 0 0.016" type="capsule" />
+                                        <body name="robot0:thdistal" pos="0 0 0.032">
+                                            <inertial pos="0 0 0.016" quat="0.99887 -0.00499935 -0.0469939 0.00499935" mass="0.016" diaginertia="1e-05 1e-05 1e-05" />
+                                            <joint name="robot0:THJ0" pos="0 0 0" axis="0 1 0" limited="true" range="-1.571 0" dclass="dip" frictionloss="0.0001" user="1117" />
+                                            <geom class="robot0:D_Vizual" name="robot0:V_thdistal" size="0.001 0.001 0.001" mesh="robot0:TH1_z"></geom>
+                                            <geom name="robot0:C_thdistal" class="robot0:DC_Hand" size="0.00918 0.013" pos="0 0 0.013" type="capsule" condim="4" />
+                                            <site name="robot0:S_thtip" pos="0 0 0.0275" group="3" />
+                                            <site name="robot0:Tch_thtip" class="robot0:D_Touch" pos="-0.005 0 0.02" size="0.005 0.011 0.016" />
+                                        </body>
+                                    </body>
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+                </body>
+                </body>
+                </body>
+                </body>
+                </body>
+    </worldbody>
+
+        <actuator>
+        <motor name="robot0:x_joint" joint="x_joint" dclass="wrist"/> 
+        <motor name="robot0:y_joint" joint="y_joint" dclass="wrist"/> 
+        <motor name="robot0:z_joint" joint="z_joint" dclass="wrist"/> 
+        <motor name="robot0:x_rotation_joint" joint="x_rotation_joint" dclass="wrist"/> 
+        <motor name="robot0:y_rotation_joint" joint="y_rotation_joint" dclass="wrist"/> 
+        <motor name="robot0:z_rotation_joint" joint="z_rotation_joint" dclass="wrist"/> 
+        <motor name="robot0:A_FFJ3" joint="robot0:FFJ3" dclass="mcp"/> 
+        <motor name="robot0:A_FFJ2" joint="robot0:FFJ2" dclass="pip"/> 
+        <motor name="robot0:A_FFJ1" joint="robot0:FFJ1" dclass="dip"/> 
+        <motor name="robot0:A_MFJ3" joint="robot0:MFJ3" dclass="mcp"/> 
+        <motor name="robot0:A_MFJ2" joint="robot0:MFJ2" dclass="pip"/> 
+        <motor name="robot0:A_MFJ1" joint="robot0:MFJ1" dclass="dip"/> 
+        <motor name="robot0:A_RFJ3" joint="robot0:RFJ3" dclass="mcp"/> 
+        <motor name="robot0:A_RFJ2" joint="robot0:RFJ2" dclass="pip"/> 
+        <motor name="robot0:A_RFJ1" joint="robot0:RFJ1" dclass="dip"/> 
+        <motor name="robot0:A_LFJ4" joint="robot0:LFJ4" dclass="mcp"/> 
+        <motor name="robot0:A_LFJ3" joint="robot0:LFJ3" dclass="mcp"/> 
+        <motor name="robot0:A_LFJ2" joint="robot0:LFJ2" dclass="pip"/> 
+        <motor name="robot0:A_LFJ1" joint="robot0:LFJ1" dclass="dip"/> 
+        <motor name="robot0:A_THJ4" joint="robot0:THJ4" dclass="mcp"/> 
+        <motor name="robot0:A_THJ3" joint="robot0:THJ3" dclass="mcp"/> 
+        <motor name="robot0:A_THJ2" joint="robot0:THJ2" dclass="pip"/> 
+        <motor name="robot0:A_THJ1" joint="robot0:THJ1" dclass="dip"/> 
+    </actuator>
+
+   
+</mujoco>
+  

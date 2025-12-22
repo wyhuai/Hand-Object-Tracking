@@ -1,0 +1,163 @@
+<mujoco model="allegro_hand_right">
+    <compiler angle="radian" meshdir="./meshes_allegro/" />
+    <size njmax="500" nconmax="100" />
+    <default>
+        <!-- 关节默认参数分类 -->
+        <joint dclass="wrist" stiffness="250" damping="45"/>
+        <joint dclass="mcp" stiffness="180" damping="25"/>
+        <joint dclass="pip" stiffness="100" damping="18"/>
+        <joint dclass="dip" stiffness="50" damping="12"/>
+        <!-- 执行器默认配置 -->
+        <motor dclass="wrist" gear="150"/>
+        <motor dclass="mcp" gear="100"/>
+        <motor dclass="pip" gear="80"/>
+        <motor dclass="dip" gear="50"/>
+    </default>
+
+    <worldbody>
+            <body name="allegro_wrist" pos="0 0 0"> 
+            <!-- this is needed else one dof less -->
+
+            <body name="allegro_root1" pos="0 0 0">
+            <inertial pos="0 0 0" mass="0.01" diaginertia="0.00333333 0.00333333 0.00333333" />
+            <joint name="x_joint" pos="0 0 0" axis="1 0 0" type="slide" limited="true" range="-2 2" dclass="wrist" frictionloss="0.0001" />
+            <body name="allegro_root2" pos="0 0 0">
+                <inertial pos="0 0 0" mass="0.01" diaginertia="0.00333333 0.00333333 0.00333333" />
+                <joint name="y_joint" pos="0 0 0" axis="0 1 0" type="slide" limited="true" range="-2 2" dclass="wrist" frictionloss="0.0001" />
+                <body name="allegro_root3" pos="0 0 0">
+                    <inertial pos="0 0 0" mass="0.01" diaginertia="0.00333333 0.00333333 0.00333333" />
+                    <joint name="z_joint" pos="0 0 0" axis="0 0 1" type="slide" limited="true" range="-2 2" dclass="wrist" frictionloss="0.0001" />
+                    <body name="allegro_root4" pos="0 0 0">
+                        <inertial pos="0 0 0" mass="0.01" diaginertia="0.00333333 0.00333333 0.00333333" />
+                        <joint name="x_rotation_joint" pos="0 0 0" axis="1 0 0" limited="true" range="-6.28 6.28" dclass="wrist" frictionloss="0.0001" />
+                        <body name="allegro_root5" pos="0 0 0">
+                            <inertial pos="0 0 0" mass="0.01" diaginertia="0.00333333 0.00333333 0.00333333" />
+                            <joint name="y_rotation_joint" pos="0 0 0" axis="0 1 0" limited="true" range="-6.28 6.28" dclass="wrist" frictionloss="0.0001" />
+                            <body name="base_link" pos="0 0 0" rpy ="0 0 0">
+                                <inertial pos="0 0 0.0475" mass="0.4154" diaginertia="0.0001 0.0001 0.0001" />
+                                <joint name="z_rotation_joint" pos="0 0 0" axis="0 0 1" limited="true" range="-6.28 6.28" dclass="wrist" frictionloss="0.0001" />
+                                <geom size="0.0204 0.0565 0.0475" pos="-0.0093 0 -0.0475" type="box" rgba="0.2 0.2 0.2 1" />
+                                <!-- index finger -->
+                                <body name="link_0.0" pos="0 0.0435 -0.001542" quat="0.999048 -0.0436194 0 0">
+                                    <inertial pos="0 0 0.0082" mass="0.0088396" diaginertia="7.55204e-07 4.8111e-07 8.40064e-07" />
+                                    <joint name="joint_0.0" pos="0 0 0" axis="0 0 1" limited="true" range="-0.47 0.47" dclass="mcp"/>
+                                    <geom size="0.0098 0.01375 0.0082" pos="0 0 0.0082" type="box" rgba="0.2 0.2 0.2 1" />
+                                    <body name="link_1.0" pos="0 0 0.0164">
+                                        <inertial pos="0 0 0.027" mass="0.029106" diaginertia="8.90704e-06 8.00454e-06 2.76606e-06" />
+                                        <joint name="joint_1.0" pos="0 0 0" axis="0 1 0" limited="true" range="-0.196 1.61" dclass="mcp" />
+                                        <geom size="0.0098 0.01375 0.027" pos="0 0 0.027" type="box" rgba="0.2 0.2 0.2 1" />
+                                        <body name="link_2.0" pos="0 0 0.054">
+                                            <inertial pos="0 0 0.0192" mass="0.0206976" diaginertia="3.8477e-06 3.20592e-06 1.96698e-06" />
+                                            <joint name="joint_2.0" pos="0 0 0" axis="0 1 0" limited="true" range="-0.174 1.709" dclass="pip" />
+                                            <geom size="0.0098 0.01375 0.0192" pos="0 0 0.0192" type="box" rgba="0.2 0.2 0.2 1" />
+                                            <body name="link_3.0" pos="0 0 0.0384">
+                                                <inertial pos="0 0 0.0178175" mass="0.0216295" diaginertia="3.03714e-06 2.5909e-06 1.78459e-06" />
+                                                <joint name="joint_3.0" pos="0 0 0" axis="0 1 0" limited="true" range="-0.227 1.618" dclass="dip" />
+                                                <geom size="0.0098 0.01375 0.01335" pos="0 0 0.01335" type="box" rgba="0.2 0.2 0.2 1" />
+                                                <geom size="0.012" pos="0 0 0.0267" rgba="0.9 0.9 0.9 1" />
+
+                                            </body>
+                                        </body>
+                                    </body>
+                                </body>
+                                <!-- middle finger -->
+                                <body name="link_4.0" pos="0 0 0.0007">
+                                    <inertial pos="0 0 0.0082" mass="0.0088396" diaginertia="7.55204e-07 4.8111e-07 8.40064e-07" />
+                                    <joint name="joint_4.0" pos="0 0 0" axis="0 0 1" limited="true" range="-0.47 0.47" dclass="mcp" />
+                                    <geom size="0.0098 0.01375 0.0082" pos="0 0 0.0082" type="box" rgba="0.2 0.2 0.2 1" />
+                                    <body name="link_5.0" pos="0 0 0.0164">
+                                        <inertial pos="0 0 0.027" mass="0.029106" diaginertia="8.90704e-06 8.00454e-06 2.76606e-06" />
+                                        <joint name="joint_5.0" pos="0 0 0" axis="0 1 0" limited="true" range="-0.196 1.61" dclass="mcp" />
+                                        <geom size="0.0098 0.01375 0.027" pos="0 0 0.027" type="box" rgba="0.2 0.2 0.2 1" />
+                                        <body name="link_6.0" pos="0 0 0.054">
+                                            <inertial pos="0 0 0.0192" mass="0.0206976" diaginertia="3.8477e-06 3.20592e-06 1.96698e-06" />
+                                            <joint name="joint_6.0" pos="0 0 0" axis="0 1 0" limited="true" range="-0.174 1.709" dclass="pip" />
+                                            <geom size="0.0098 0.01375 0.0192" pos="0 0 0.0192" type="box" rgba="0.2 0.2 0.2 1" />
+                                            <body name="link_7.0" pos="0 0 0.0384">
+                                                <inertial pos="0 0 0.0178175" mass="0.0216295" diaginertia="3.03714e-06 2.5909e-06 1.78459e-06" />
+                                                <joint name="joint_7.0" pos="0 0 0" axis="0 1 0" limited="true" range="-0.227 1.618" dclass="dip" />
+                                                <geom size="0.0098 0.01375 0.01335" pos="0 0 0.01335" type="box" rgba="0.2 0.2 0.2 1" />
+                                                <geom size="0.012" pos="0 0 0.0267" rgba="0.9 0.9 0.9 1" />
+
+                                            </body>
+                                        </body>
+                                    </body>
+                                </body>
+                                <!-- pinkie finger -->
+                                <body name="link_8.0" pos="0 -0.0435 -0.001542" quat="0.999048 0.0436194 0 0">
+                                    <inertial pos="0 0 0.0082" mass="0.0088396" diaginertia="7.55204e-07 4.8111e-07 8.40064e-07" />
+                                    <joint name="joint_8.0" pos="0 0 0" axis="0 0 1" limited="true" range="-0.47 0.47" dclass="mcp" />
+                                    <geom size="0.0098 0.01375 0.0082" pos="0 0 0.0082" type="box" rgba="0.2 0.2 0.2 1" />
+                                    <body name="link_9.0" pos="0 0 0.0164">
+                                        <inertial pos="0 0 0.027" mass="0.029106" diaginertia="8.90704e-06 8.00454e-06 2.76606e-06" />
+                                        <joint name="joint_9.0" pos="0 0 0" axis="0 1 0" limited="true" range="-0.196 1.61" dclass="mcp" />
+                                        <geom size="0.0098 0.01375 0.027" pos="0 0 0.027" type="box" rgba="0.2 0.2 0.2 1" />
+                                        <body name="link_10.0" pos="0 0 0.054">
+                                            <inertial pos="0 0 0.0192" mass="0.0206976" diaginertia="3.8477e-06 3.20592e-06 1.96698e-06" />
+                                            <joint name="joint_10.0" pos="0 0 0" axis="0 1 0" limited="true" range="-0.174 1.709" dclass="pip" />
+                                            <geom size="0.0098 0.01375 0.0192" pos="0 0 0.0192" type="box" rgba="0.2 0.2 0.2 1" />
+                                            <body name="link_11.0" pos="0 0 0.0384">
+                                                <inertial pos="0 0 0.0178175" mass="0.0216295" diaginertia="3.03714e-06 2.5909e-06 1.78459e-06" />
+                                                <joint name="joint_11.0" pos="0 0 0" axis="0 1 0" limited="true" range="-0.227 1.618" dclass="dip" />
+                                                <geom size="0.0098 0.01375 0.01335" pos="0 0 0.01335" type="box" rgba="0.2 0.2 0.2 1" />
+                                                <geom size="0.012" pos="0 0 0.0267" rgba="0.9 0.9 0.9 1" />
+                                            </body>
+                                        </body>
+                                    </body>
+                                </body>
+                                <!-- thumb  -->
+                                <body name="link_12.0" pos="-0.0182 0.019333 -0.045987" quat="0.477714 -0.521334 -0.521334 -0.477714">
+                                    <inertial pos="-0.0179 0.009 0.0145" mass="0.0553826" diaginertia="1.48898e-05 1.54697e-05 1.12502e-05" />
+                                    <joint name="joint_12.0" pos="0 0 0" axis="-1 0 0" limited="true" range="0.263 3" dclass="mcp" />
+                                    <geom size="0.0179 0.017 0.02275" pos="-0.0179 0.009 0.0145" type="box" rgba="0.2 0.2 0.2 1" />
+                                    <body name="link_13.0" pos="-0.027 0.005 0.0399">
+                                        <inertial pos="0 0 0.00885" mass="0.0095403" diaginertia="8.50311e-07 5.5449e-07 9.06654e-07" />
+                                        <joint name="joint_13.0" pos="0 0 0" axis="0 0 1" limited="true" range="-0.105 1.163" dclass="mcp" />
+                                        <geom size="0.0098 0.01375 0.00885" pos="0 0 0.00885" type="box" rgba="0.2 0.2 0.2 1" />
+                                        <body name="link_14.0" pos="0 0 0.0177">
+                                            <inertial pos="0 0 0.0257" mass="0.0277046" diaginertia="7.8455e-06 6.98645e-06 2.63288e-06" />
+                                            <joint name="joint_14.0" pos="0 0 0" axis="0 1 0" limited="true" range="-0.189 1.644" dclass="pip" />
+                                            <geom size="0.0098 0.01375 0.0257" pos="0 0 0.0257" type="box" rgba="0.2 0.2 0.2 1" />
+                                            <body name="link_15.0" pos="0 0 0.0514">
+                                                <inertial pos="0 0 0.0262465" mass="0.0300379" diaginertia="7.71099e-06 7.00403e-06 2.58367e-06" />
+                                                <joint name="joint_15.0" pos="0 0 0" axis="0 1 0" limited="true" range="-0.162 1.719" dclass="dip" />
+                                                <geom size="0.0098 0.01375 0.02115" pos="0 0 0.02115" type="box" rgba="0.2 0.2 0.2 1" />
+                                                <geom size="0.012" pos="0 0 0.0423" rgba="0.9 0.9 0.9 1" />
+
+                        </body>
+                    </body>
+                    </body>
+                    </body>
+                    </body>
+                    </body>
+                    </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+    <actuator>
+    <motor name="x_joint" joint="x_joint" dclass="wrist"/> 
+    <motor name="y_joint" joint="y_joint" dclass="wrist"/> 
+    <motor name="z_joint" joint="z_joint" dclass="wrist"/> 
+    <motor name="x_rotation_joint" joint="x_rotation_joint" dclass="wrist"/> 
+    <motor name="y_rotation_joint" joint="y_rotation_joint" dclass="wrist"/> 
+    <motor name="z_rotation_joint" joint="z_rotation_joint" dclass="wrist"/> 
+    <motor name="joint_0.0" joint="joint_0.0" dclass="mcp"/> 
+    <motor name="joint_1.0" joint="joint_1.0" dclass="mcp"/> 
+    <motor name="joint_2.0" joint="joint_2.0" dclass="pip"/> 
+    <motor name="joint_3.0" joint="joint_3.0" dclass="dip"/> 
+    <motor name="joint_4.0" joint="joint_4.0" dclass="mcp"/> 
+    <motor name="joint_5.0" joint="joint_5.0" dclass="mcp"/> 
+    <motor name="joint_6.0" joint="joint_6.0" dclass="pip"/> 
+    <motor name="joint_7.0" joint="joint_7.0" dclass="dip"/> 
+    <motor name="joint_8.0" joint="joint_8.0" dclass="mcp"/> 
+    <motor name="joint_9.0" joint="joint_9.0" dclass="mcp"/> 
+    <motor name="joint_10.0" joint="joint_10.0" dclass="pip"/> 
+    <motor name="joint_11.0" joint="joint_11.0" dclass="dip"/> 
+    <motor name="joint_12.0" joint="joint_12.0" dclass="mcp"/> 
+    <motor name="joint_13.0" joint="joint_13.0" dclass="mcp"/> 
+    <motor name="joint_14.0" joint="joint_14.0" dclass="pip"/> 
+    <motor name="joint_15.0" joint="joint_15.0" dclass="dip"/> 
+  </actuator>
+</mujoco>

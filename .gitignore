@@ -1,1 +1,4 @@
 *largemlp*.pth
+checkpoint/5objs_debug
+output
+hot/data/motions/multiobj_distill
