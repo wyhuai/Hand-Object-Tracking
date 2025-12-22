@@ -3,7 +3,7 @@
                 <link name="base_link">
                     <visual>
                     <geometry>
-                        <mesh filename="top_watertight_tiny.stl" scale="1.0 1.0 1.0"/>
+                        <mesh filename="top_watertight_tiny.stl" scale="1 1 1"/>
                     </geometry>
                     <material name="object_material">
                         <color rgba="0.8 0.6 0.4 1.0"/>
@@ -11,7 +11,7 @@
                     </visual>
                     <collision>
                     <geometry>
-                        <mesh filename="top_watertight_tiny.stl" scale="1.0 1.0 1.0"/>
+                        <mesh filename="top_watertight_tiny.stl" scale="1 1 1"/>
                     </geometry>
                     </collision>
                     <inertial>
