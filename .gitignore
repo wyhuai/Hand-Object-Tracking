@@ -2,3 +2,21 @@
 checkpoint/5objs_debug
 output
 hot/data/motions/multiobj_distill
+# ============================================
+# 未跟踪的大文件/目录 - 添加于 $(date)
+# ============================================
+
+# Blender 运动数据
+blender_motion/
+
+# 3D 模型文件（包含中文路径）
+hot/data/assets/urdf/airplane (飞机)/
+hot/data/assets/urdf/airplane/
+*.stl
+
+# 动作训练数据
+hot/data/motions/dexgrasp_train_mano_20obj/
+hot/data/motions/dexgrasp_train_mano_grasp_grab/
+
+# 所有 motions 数据（防止未来添加）
+hot/data/motions/
