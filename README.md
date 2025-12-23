@@ -1,6 +1,6 @@
 # Hand-Object Tracking (HOT)
 
-[**Paper**](https://arxiv.org/abs/2512.19583) | [**Project Page**](https://ingrid789.github.io/hot/) | [**Video**](INSERT_VIDEO_URL_HERE)
+[**Paper**](https://arxiv.org/abs/2512.19583) | [**Project Page**](https://ingrid789.github.io/hot/) | [**Video**](https://youtu.be/WygsdIDDR_s)
 
 Code release for the paper "Learning Generalizable Hand-Object Tracking from Synthetic
 Demonstrations".
@@ -8,10 +8,12 @@ Demonstrations".
 # TODO 📋
 
 - [ ] adapt to Isaacsim simulator
-- [x] Release pre-trained model checkpoints
+- [ ] Release Grab and text2hoi motion file
+- [ ] Release distilled student checkpoint
+- [x] Release pre-trained teacher checkpoints
 - [x] Release multiobjs train data
 - [x] Release data generation code
-- [x] Release train、test and distill code
+- [x] Release train, test and distill code
 
 
 ## Installation 💽
