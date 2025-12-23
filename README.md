@@ -1,9 +1,35 @@
-# Hand-Object Tracking (HOT)
+<h1 align="center"> Learning Generalizable Hand-Object Tracking from Synthetic
+Demonstrations </h1>
 
-[**Paper**](https://arxiv.org/abs/2512.19583) | [**Project Page**](https://ingrid789.github.io/hot/) | [**Video**](https://youtu.be/WygsdIDDR_s)
+<p align="center">
+  <a href='https://wyhuai.github.io/info/' target='_blank'>Yinhuai Wang*</a>,
+  <a href='https://ingrid789.github.io/IngridYu/' target='_blank'>Runyi Yu*</a>,
+  <a href='mailto:hwtsui@connect.ust.hk' target='_blank'>Hok Wai Tsui*</a>,
+  <a href="https://github.com/XiaoyiLin-code">Xiaoyi Lin*</a>,
+  <a href="https://zdchan.github.io/">Hui Zhang</a>,
+  <a href="https://github.com/QihanZhao">Qihan Zhao</a>,
+  <a href="https://vankouf.github.io/">Ke Fan</a>,
+  <br>
+  <a href="https://miaoli.github.io/">Miao Li</a>,
+  <a href="https://ait.ethz.ch/people/song">Jie Song</a>,
+  <a href="https://wangjingbo1219.github.io/">Jingbo Wang</a>,
+  <a href="https://cqf.io/">Qifeng Chen<sup>&dagger;</sup></a>,
+  <a href='https://ece.hkust.edu.hk/pingtan' target='_blank'>Ping Tan<sup>&dagger;</sup></a>
+  <br>
+  *Equal Contributions&nbsp;&nbsp;&nbsp;&nbsp;<sup>&dagger;</sup>Corresponding Authors
+  <br>
+</p>
 
-Code release for the paper "Learning Generalizable Hand-Object Tracking from Synthetic
-Demonstrations".
+<p align="center">
+  <a href="https://arxiv.org/abs/2512.19583"><img src="https://img.shields.io/badge/arXiv-2510.11072-brown" alt="arXiv"></a>
+  <a href="https://youtu.be/WygsdIDDR_s"><img src="https://img.shields.io/badge/Youtube-🎬-yellow" alt="YouTube"></a>
+  <a href="https://ingrid789.github.io/hot/"><img src="https://img.shields.io/badge/Website-%F0%9F%9A%80-green" alt="Website"></a>
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg" alt="License: CC BY-NC-SA 4.0"></a>
+</p>
+
+<p align="center">
+  <img src="teaser.png" alt="Project teaser" width="100%">
+</p>
 
 # TODO 📋
 
