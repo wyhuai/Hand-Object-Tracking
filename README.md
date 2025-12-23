@@ -28,7 +28,7 @@ Demonstrations </h1>
 </p>
 
 <p align="center">
-  <img src="teaser.png" alt="Project teaser" width="100%">
+  <img src="teaser.gif" alt="Project teaser" width="100%">
 </p>
 
 # TODO 📋
