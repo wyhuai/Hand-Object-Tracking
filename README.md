@@ -1,6 +1,6 @@
 # Hand-Object Tracking (HOT)
 
-[**Paper**](INSERT_PAPER_URL_HERE) | [**Project Page**](https://anonymous6241.github.io/) | [**Video**](INSERT_VIDEO_URL_HERE)
+[**Paper**](INSERT_PAPER_URL_HERE) | [**Project Page**](https://ingrid789.github.io/hot/) | [**Video**](INSERT_VIDEO_URL_HERE)
 
 Code release for the paper "Learning Generalizable Hand-Object Tracking from Synthetic
 Demonstrations".
