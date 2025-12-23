@@ -1,6 +1,6 @@
 # Hand-Object Tracking (HOT)
 
-[**Paper**](INSERT_PAPER_URL_HERE) | [**Project Page**](https://ingrid789.github.io/hot/) | [**Video**](INSERT_VIDEO_URL_HERE)
+[**Paper**](https://arxiv.org/abs/2512.19583) | [**Project Page**](https://ingrid789.github.io/hot/) | [**Video**](INSERT_VIDEO_URL_HERE)
 
 Code release for the paper "Learning Generalizable Hand-Object Tracking from Synthetic
 Demonstrations".
@@ -336,12 +336,12 @@ bash test.sh
 If you find this repository useful, please cite the original SkillMimic paper:
 
 ```text
-@InProceedings{Wang_2025_xxx,
-author = {Wang, Yinhuai et al.},
-title = {xxx},
-booktitle = {xxx},
-year = {2025}
-}
+      @article{wang2025hot,
+        title={Learning Generalizable Hand-Object Tracking from Synthetic Demonstrations},
+        author={Wang, Yinhuai and Yu, Runyi and Tsui, Hok Wai and Xiaoyi Lin and Hui, Zhang and Zhao, Qihan and Ke, Fan and Li, Miao, and Song, Jie and Wang, Jingbo and Chen, Qifeng and Tan, Ping},
+        journal={arXiv preprint arXiv:2512.19583},
+        year={2025}
+      }
 ```
 
 
