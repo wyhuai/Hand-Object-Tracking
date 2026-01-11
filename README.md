@@ -207,7 +207,7 @@ CUDA_LAUNCH_BLOCKING=1 python hot/run.py --test --task SkillMimicHandRand \
 --num_envs 1 \
 --cfg_env hot/data/cfg/mano/mano_stage1_precise_track.yaml \
 --cfg_train hot/data/cfg/train/rlg/skillmimic_denseobj.yaml \
---motion_file hot/data/motions/text2hoi/000_Text2HOI_[OBJ NAME]-ckpt_${CKPT_SUFFIX}.pt \
+--motion_file hot/data/motions/text2hoi/000_Text2HOI_${OBJ_NAME}-ckpt_${CKPT_SUFFIX}.pt \
 --state_init 2 \
 --episode_length 180 \
 --enable_obj_keypoints \
