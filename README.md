@@ -34,9 +34,9 @@ Demonstrations </h1>
 # TODO 📋
 
 - [ ] adapt to Isaacsim simulator
-- [ ] Release Grab and text2hoi motion file
 - [ ] Release distilled student checkpoint
 - [x] Release pre-trained teacher checkpoints
+- [x] Release Text2HOI motion file
 - [x] Release multiobjs train data
 - [x] Release data generation code
 - [x] Release train, test and distill code
@@ -188,8 +188,8 @@ CUDA_LAUNCH_BLOCKING=1 python hot/run.py --test --task SkillMimicHandRand \
 --enable_obj_keypoints \
 --use_delta_action \
 --enable_dof_obs \
---objnames \[OBJ NAME\] \
---checkpoint \[CHECKPOINT\]
+--objnames ${OBJ_NAME} \
+--checkpoint ${CHECKPOINT}
 ```
 
 Please note that different skills require specific `--episode_length` settings during training and inference. Refer to the table below for the specific values:
@@ -198,6 +198,36 @@ Please note that different skills require specific `--episode_length` settings d
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Skill Label** | 1 | 2 | 3  | 5 | 6 | 7 | 8 | 9 |
 | **Test Ep. Length** | 180 | 120 | 220 | 180 | 120 | 100 | 50 | 120 |
+
+
+### Inference Text2HOI Tracking:
+```Bash
+# Replace ${OBJ_NAME} and ${CKPT_SUFFIX} according to the table below
+CUDA_LAUNCH_BLOCKING=1 python hot/run.py --test --task SkillMimicHandRand \
+--num_envs 1 \
+--cfg_env hot/data/cfg/mano/mano_stage1_precise_track.yaml \
+--cfg_train hot/data/cfg/train/rlg/skillmimic_denseobj.yaml \
+--motion_file hot/data/motions/text2hoi/000_Text2HOI_[OBJ NAME]-ckpt_${CKPT_SUFFIX}.pt \
+--state_init 2 \
+--episode_length 180 \
+--enable_obj_keypoints \
+--use_delta_action \
+--enable_dof_obs \
+--objnames Text2HOI_${OBJ_NAME} \
+--checkpoint checkpoint/multiobj_teacher_checkpoints/GraspMovePlace_${CKPT_SUFFIX}_0.pth
+```
+**Supported Trajectory Configurations:**
+
+Please refer to the following mapping to set the correct arguments for each trajectory:
+
+| Trajectory ID | `${OBJ_NAME}` | `${CKPT_SUFFIX}` | Text2HOI Prompt |
+| :--- | :--- | :--- | :--- |
+| 1 | **Apple** | `sword` | Eat an apple with right hands. |
+| 2 | **Duck** | `airplane` | Play duck with right hands. |
+| 3 | **Piggybank** | `book` | Pass a piggybank with right hand. |
+| 4 | **Waterbottle** | `airplane` | Hold a waterbottle with right hands. |
+
+For example, to track the **Piggybank**, you would use `OBJ_NAME=Piggybank` and `CKPT_SUFFIX=book`.
 
 ---
 

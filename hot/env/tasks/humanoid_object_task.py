@@ -128,12 +128,6 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
                 asset_options.vhacd_params.resolution = 300000
 
                 self.loaded_assets[obj_name] = self.gym.load_asset(self.sim, asset_root, obj_asset_path, asset_options)
-                ################## load obj keypoints while building the env ##################
-                # # 加载mesh并提取关键点
-                # mesh_path = os.path.join(asset_root, obj_name, 'top_watertight_tiny.obj')
-                # obj_keypoints = self.extract_keypoints(mesh_path, num_keypoints=20).to(self.device)
-                # self.loaded_assets_keypoints[obj_name] = obj_keypoints
-
                 # object tracking asset, no_collision
                 asset_options_tk = gymapi.AssetOptions()
                 asset_options_tk.disable_gravity = True
@@ -169,7 +163,10 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
         obj_name = self._obj_id_name[obj_id.item()]
 
         _target_asset = self.loaded_assets[obj_name]
-        mesh_type = "stl"
+        if 'text2hoi' in self.cfg['args'].motion_file:
+            mesh_type = "ply"
+        else:
+            mesh_type = "stl"
         mesh_path = os.path.join('hot/data/assets/urdf', obj_name, f'top_watertight_tiny.{mesh_type}')
         self._obj_surface_pt[env_id] = self.extract_objpoints(mesh_path, num_keypoints=self._num_sampled_obj_surface_pt).to(self.device)
         col_group = env_id 
