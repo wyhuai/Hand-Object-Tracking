@@ -363,18 +363,5 @@ We provide a convenient script for testing multi-object policies. **Please modif
 bash test.sh
 ```
 
-## Citation 🔗
-
-If you find this repository useful, please cite the original SkillMimic paper:
-
-```text
-      @article{wang2025hot,
-        title={Learning Generalizable Hand-Object Tracking from Synthetic Demonstrations},
-        author={Wang, Yinhuai and Yu, Runyi and Tsui, Hok Wai and Xiaoyi Lin and Hui, Zhang and Zhao, Qihan and Ke, Fan and Li, Miao, and Song, Jie and Wang, Jingbo and Chen, Qifeng and Tan, Ping},
-        journal={arXiv preprint arXiv:2512.19583},
-        year={2025}
-      }
-```
-
 
 
