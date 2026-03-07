@@ -1,5 +1,5 @@
 <h1 align="center">Learning Generalizable Hand-Object Tracking from Synthetic Demonstrations</h1>
-
+<a href='https://arxiv.org/abs/2512.19583'><img src='https://img.shields.io/badge/ArXiv-2505.02094-red'></a> <a href='https://ingrid789.github.io/hot/'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
 <p align="center">
   <img src="teaser.gif" alt="Project teaser" width="100%">
 </p>
