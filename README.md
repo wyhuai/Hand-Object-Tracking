@@ -1,5 +1,4 @@
-<h1 align="center"> A System for Learning Generalizable Hand-Object Tracking Controller from Synthetic
-Hand-Object Demonstrations </h1>
+<h1 align="center">Learning Generalizable Hand-Object Tracking from Synthetic Demonstrations </h1>
 
 <p align="center">
   <img src="teaser.gif" alt="Project teaser" width="100%">
