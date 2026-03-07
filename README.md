@@ -1,4 +1,4 @@
-<h1 align="center">[**Learning Generalizable Hand-Object Tracking from Synthetic Demonstrations**](https://ingrid789.github.io/hot/) </h1>
+<h1 align="center">[Learning Generalizable Hand-Object Tracking from Synthetic Demonstrations](https://ingrid789.github.io/hot/) </h1>
 
 <p align="center">
   <img src="teaser.gif" alt="Project teaser" width="100%">
