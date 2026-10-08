@@ -21,17 +21,15 @@
 </p>
 
 <p align="center">
-  <sup>1</sup>The Hong Kong University of Science and Technology
+  <sup>1</sup>HKUST
   &nbsp;&nbsp;
   <sup>2</sup>Wuhan University
-  <br>
   <sup>3</sup>Shanghai AI Laboratory
   &nbsp;&nbsp;
   <sup>4</sup>ETH Zurich
   &nbsp;&nbsp;
-  <sup>5</sup>Shanghai Jiao Tong University
-  <br>
-  <sup>6</sup>The Hong Kong University of Science and Technology (Guangzhou)
+  <sup>5</sup>SJTU
+  <sup>6</sup>HKUST (Guangzhou)
 </p>
 
 <p align="center">
@@ -45,6 +43,7 @@
   <a href="https://ingrid789.github.io/hot/"><img src="https://img.shields.io/badge/Project-Page-green" alt="Project Page"></a>
   <a href="https://arxiv.org/abs/2512.19583"><img src="https://img.shields.io/badge/arXiv-2512.19583-b31b1b" alt="arXiv"></a>
   <a href="https://youtu.be/WygsdIDDR_s"><img src="https://img.shields.io/badge/Video-YouTube-red" alt="Video"></a>
+  <a href="https://github.com/wyhuai/Hand-Object-Tracking/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-lightgrey" alt="License: Apache 2.0"></a>
 </div>
 
 <hr>
