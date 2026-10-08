@@ -1,9 +1,53 @@
 <h1 align="center">Learning Generalizable Hand-Object Tracking from Synthetic Demonstrations</h1>
 
+<p align="center">
+  <strong>🎉 Accepted to NeurIPS 2026 🎉</strong>
+</p>
+
+<p align="center">
+  <a href="https://ingrid789.github.io/IngridYu/">Runyi Yu</a><sup>1,*</sup>,
+  <a href="https://github.com/XiaoyiLin-code">Xiaoyi Lin</a><sup>2,*</sup>,
+  <a href="mailto:hwtsui@connect.ust.hk">Hok Wai Tsui</a><sup>1,*</sup>,
+  <a href="https://wyhuai.github.io/info/">Yinhuai Wang</a><sup>1,*,✉</sup>,
+  <a href="https://zdchan.github.io/">Hui Zhang</a><sup>4</sup>,
+  <a href="https://github.com/QihanZhao">Qihan Zhao</a><sup>1</sup>,
+  <a href="https://vankouf.github.io/">Ke Fan</a><sup>5</sup>,
+  <br>
+  <a href="https://miaoli.github.io/">Miao Li</a><sup>2</sup>,
+  <a href="https://ait.ethz.ch/people/song">Jie Song</a><sup>6</sup>,
+  <a href="https://wangjingbo1219.github.io/">Jingbo Wang</a><sup>3</sup>,
+  <a href="https://cqf.x10host.com/">Qifeng Chen</a><sup>1,✉</sup>,
+  <a href="https://ece.hkust.edu.hk/pingtan">Ping Tan</a><sup>1,✉</sup>
+</p>
+
+<p align="center">
+  <sup>1</sup>The Hong Kong University of Science and Technology
+  &nbsp;&nbsp;
+  <sup>2</sup>Wuhan University
+  <br>
+  <sup>3</sup>Shanghai AI Laboratory
+  &nbsp;&nbsp;
+  <sup>4</sup>ETH Zurich
+  &nbsp;&nbsp;
+  <sup>5</sup>Shanghai Jiao Tong University
+  <br>
+  <sup>6</sup>The Hong Kong University of Science and Technology (Guangzhou)
+</p>
+
+<p align="center">
+  <sup>*</sup>Equal contributors
+  &nbsp;&nbsp;
+  <sup>✉</sup>Corresponding authors
+</p>
 
 <div align="center">
-<a href='https://arxiv.org/abs/2512.19583'><img src='https://img.shields.io/badge/ArXiv-2512.19583-red'></a> <a href='https://ingrid789.github.io/hot/'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
+  <a href="https://github.com/wyhuai/Hand-Object-Tracking"><img src="https://img.shields.io/badge/Code-HOT-blue" alt="Code"></a>
+  <a href="https://ingrid789.github.io/hot/"><img src="https://img.shields.io/badge/Project-Page-green" alt="Project Page"></a>
+  <a href="https://arxiv.org/abs/2512.19583"><img src="https://img.shields.io/badge/arXiv-2512.19583-b31b1b" alt="arXiv"></a>
+  <a href="https://youtu.be/WygsdIDDR_s"><img src="https://img.shields.io/badge/Video-YouTube-red" alt="Video"></a>
 </div>
+
+<hr>
 
 <p align="center">
   <img src="teaser.gif" alt="Project teaser" width="100%">
