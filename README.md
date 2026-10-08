@@ -24,11 +24,13 @@
   <sup>1</sup>HKUST
   &nbsp;&nbsp;
   <sup>2</sup>Wuhan University
+  &nbsp;&nbsp;
   <sup>3</sup>Shanghai AI Laboratory
   &nbsp;&nbsp;
   <sup>4</sup>ETH Zurich
   &nbsp;&nbsp;
   <sup>5</sup>SJTU
+  &nbsp;&nbsp;
   <sup>6</sup>HKUST (Guangzhou)
 </p>
 
